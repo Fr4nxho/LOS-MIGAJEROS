@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="TN_Proveedor" version="4">
+  <OBJECT>
+    <ID name="TN_Proveedor" mc="Standard.Actor" uid="933906b2-2b55-4aa1-87ea-65974065f8e9"/>
+    <PID name="2. Abastecer" mc="Standard.Package" uid="09a5598c-6f95-48f7-bcdf-b78b6fd9aeb9"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[TN_Proveedor]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedEnd">
+        <REFOBJ>
+          <ID name="emite pedido" mc="Standard.AssociationEnd" uid="f3ee998b-c8ae-4028-89e5-d87a39bcbfce"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="entrega pago a proveedor" mc="Standard.AssociationEnd" uid="69430812-0a3f-4b58-9614-71444a26389d"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="verifica falta de stock" mc="Standard.AssociationEnd" uid="8616549e-8652-4445-af59-cfa9654339bd"/>
+        </REFOBJ>
+        <OBJECT>
+          <ID name="actualiza stock" mc="Standard.AssociationEnd" uid="5df6db2d-075a-4bee-8515-693ffaa4530c"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">AccesNone</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"></ATT>
+            <ATT name="MultiplicityMax"></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[actualiza stock]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="Opposite">
+              <REFOBJ>
+                <ID name="" mc="Standard.AssociationEnd" uid="13e229b1-b3f0-44c1-8786-1a1aef70f16f"/>
+              </REFOBJ>
+            </COMP>
+            <COMP relation="Association">
+              <REFOBJ>
+                <ID name="" mc="Standard.Association" uid="e307d549-98ef-44e5-a50f-c9930bccc474"/>
+              </REFOBJ>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+        <REFOBJ>
+          <ID name="recibe pedido" mc="Standard.AssociationEnd" uid="3c56042c-c5e0-4a6b-b8f0-1dc1c4f9cac2"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="recibe pago" mc="Standard.AssociationEnd" uid="aa19d8f6-5d18-4093-9fe9-487b12ade655"/>
+        </REFOBJ>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

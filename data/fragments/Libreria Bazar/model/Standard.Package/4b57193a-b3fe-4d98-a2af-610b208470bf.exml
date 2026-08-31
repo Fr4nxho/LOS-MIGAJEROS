@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="1. Atender Ventas" version="4">
+  <OBJECT>
+    <ID name="1. Atender Ventas" mc="Standard.Package" uid="4b57193a-b3fe-4d98-a2af-610b208470bf"/>
+    <PID name="CASOS DE USO" mc="Standard.Package" uid="73ecdb76-5153-4f38-a86d-6a0b97b81161"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[1. Atender Ventas]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CUS_Registrar Venta" mc="Standard.UseCase" uid="d9ef5f6e-64fe-4548-8b3b-328dff931bb5"/>
+        <COMPID name="CUS_Registrar Pago Cliente" mc="Standard.UseCase" uid="81e44ccc-efaa-4417-984a-9e8f58fa9413"/>
+        <COMPID name="CUS_Generar Reporte de Venta" mc="Standard.UseCase" uid="8f86d07e-22b1-4d0e-aca6-1ae172b23a66"/>
+        <COMPID name="CUS_Ver Ganancias Diarias" mc="Standard.UseCase" uid="cca344c6-9176-4cde-bee5-81f88b171089"/>
+        <COMPID name="CUS_Calcular Total" mc="Standard.UseCase" uid="3d8aca04-7996-4624-a48e-0f82ffded1c1"/>
+        <COMPID name="CUS_Aplicar Descuento" mc="Standard.UseCase" uid="8d200f0a-e221-433d-befa-a6c3f03e92f6"/>
+        <COMPID name="CUS_Actualizar Stock por Venta" mc="Standard.UseCase" uid="abba1b60-ef94-422c-bb7f-5a14e7188ede"/>
+        <COMPID name="CUS_Ver Historial de Ventas" mc="Standard.UseCase" uid="2fb016c9-58b7-48ae-8a8f-8f8170873d95"/>
+        <COMPID name="CUS_Exportar Resumen de Ventas" mc="Standard.UseCase" uid="ddf50460-d094-4905-b6c8-b1282358a957"/>
+        <COMPID name="CUS_Generar Reporte de Ventas" mc="Standard.UseCase" uid="32c97ef9-5d6d-4072-8fc4-258f5907419d"/>
+        <COMPID name="CUS_Mostrar ganancia diaria" mc="Standard.UseCase" uid="3638e071-f8b0-4bad-ba9a-abbeb5b75e64"/>
+        <COMPID name="CUS_Ver Contador Ventas" mc="Standard.UseCase" uid="e9d33cf3-5479-4bf6-a695-edd4ac0a120e"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCUS_Ventas" mc="Standard.UseCaseDiagram" uid="403f0440-2bfa-49c4-bc3d-89ba9f37d1a7"/>
+      </COMP>
+      <COMP relation="Descriptor">
+        <OBJECT>
+          <ID name="" mc="Infrastructure.Note" uid="33e96826-2d8d-4c00-8f0e-e39986d6a8d3"/>
+          <ATTRIBUTES>
+            <ATT name="Content"><![CDATA[<Enter note text here>]]></ATT>
+            <ATT name="MimeType"><![CDATA[text/plain]]></ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Model">
+              <FOREIGNID name="description" mc="Infrastructure.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

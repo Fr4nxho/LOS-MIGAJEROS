@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="ACTORES DE SISTEMAS" version="4">
+  <OBJECT>
+    <ID name="ACTORES DE SISTEMAS" mc="Standard.Package" uid="8d746f93-de0b-4842-b63c-5a7d23d81f43"/>
+    <PID name="REQUISITOS" mc="Standard.Package" uid="025aee46-12cc-4c34-b63c-3410c17fc281"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[ACTORES DE SISTEMAS]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="AS_Encargado" mc="Standard.Actor" uid="59e38193-1757-42a8-8ddf-0c9b82f52117"/>
+        <COMPID name="AS_Propietario" mc="Standard.Actor" uid="9571bd67-9fd4-4d33-a917-b5adfea0b2d2"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
