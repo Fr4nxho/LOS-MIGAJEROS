@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Modelo de Negocio" version="4">
+  <OBJECT>
+    <ID name="Modelo de Negocio" mc="Standard.Package" uid="36cdf9bb-9008-4de1-8866-6f4329f7aa84"/>
+    <PID name="libreria bazar" mc="Standard.Package" uid="8eef757a-432e-48c1-92dd-d493a9b7df3f"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Modelo de Negocio]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Modelo de Casos de Uso de Negocio" mc="Standard.Package" uid="994a1d15-0028-42b8-8143-9e039d793e5a"/>
+        <COMPID name="Modelo de Analisis de Negocio" mc="Standard.Package" uid="8dde9648-051a-427c-8ca2-694e0634289d"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

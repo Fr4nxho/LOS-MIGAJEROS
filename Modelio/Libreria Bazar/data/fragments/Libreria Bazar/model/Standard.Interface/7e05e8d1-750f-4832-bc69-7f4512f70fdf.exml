@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Calcular automáticamente el total de cada venta y los ingresos
+   generados durante el día" version="4">
+  <OBJECT>
+    <ID name="Calcular automáticamente el total de cada venta y los ingresos
+   generados durante el día" mc="Standard.Interface" uid="7e05e8d1-750f-4832-bc69-7f4512f70fdf"/>
+    <PID name="Modelo de Casos de Uso de Negocio" mc="Standard.Package" uid="994a1d15-0028-42b8-8143-9e039d793e5a"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">true</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Calcular automáticamente el total de cada venta y los ingresos
+   generados durante el día]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="DependsOnDependency">
+        <OBJECT>
+          <ID name="" mc="Infrastructure.Dependency" uid="493d3318-f1dd-4684-b2d3-772094efaee1"/>
+          <ATTRIBUTES>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="DependsOn">
+              <ID name="Mejorar la gestión de inventario, ventas y servicios a través de la automatización" mc="Standard.Interface" uid="b0936366-4418-48c8-adf3-5ccd730ca3b4"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

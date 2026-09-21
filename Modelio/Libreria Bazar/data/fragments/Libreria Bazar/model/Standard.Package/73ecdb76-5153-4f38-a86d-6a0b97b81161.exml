@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CASOS DE USO DEL SISTEMA" version="4">
+  <OBJECT>
+    <ID name="CASOS DE USO DEL SISTEMA" mc="Standard.Package" uid="73ecdb76-5153-4f38-a86d-6a0b97b81161"/>
+    <PID name="REQUISITOS" mc="Standard.Package" uid="025aee46-12cc-4c34-b63c-3410c17fc281"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CASOS DE USO DEL SISTEMA]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="1Atender Ventas y Servicios" mc="Standard.Package" uid="4b57193a-b3fe-4d98-a2af-610b208470bf"/>
+        <COMPID name="2Abastecer Mercaderia" mc="Standard.Package" uid="1f305748-b2e2-401a-bcdc-ed09454cb33f"/>
+        <COMPID name="3Gestionar Inventario" mc="Standard.Package" uid="d073a109-460e-4a05-9e73-80e954926c80"/>
+        <COMPID name="0 Acceso" mc="Standard.Package" uid="08dbee58-9ca2-4998-a907-723e795f5553"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

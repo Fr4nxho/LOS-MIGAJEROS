@@ -1,0 +1,185 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="1. Ventas" version="4">
+  <OBJECT>
+    <ID name="1. Ventas" mc="Standard.Package" uid="c1964ed6-1928-40ab-b90f-49f6fedf4e22"/>
+    <PID name="Modelo de Analisis de Negocio" mc="Standard.Package" uid="8dde9648-051a-427c-8ca2-694e0634289d"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[1. Ventas]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedBehavior">
+        <COMPID name="Activity" mc="Standard.Activity" uid="0ff5fbf6-b78d-46c1-80ae-103685949ef1"/>
+      </COMP>
+      <COMP relation="OwnedInformationFlow">
+        <OBJECT>
+          <ID name="No" mc="Standard.InformationFlow" uid="56b30928-8340-46be-9d92-040f0f7812c4"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[No]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="b321b3b2-ae5f-436e-a695-bac0bad20650"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="b321b3b2-ae5f-436e-a695-bac0bad20650"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Si" mc="Standard.InformationFlow" uid="f61a5055-5c87-4fa4-8851-e2f72ec6ec68"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[Si]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="b4913e9b-acd0-41ab-9c39-08b5915e6497"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="b4913e9b-acd0-41ab-9c39-08b5915e6497"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Si" mc="Standard.InformationFlow" uid="f17eebbb-21bc-46ca-b8b5-12595dadc9ec"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[Si]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="6c4884dc-54f6-4827-9bce-1f6fffe0c0ca"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="6c4884dc-54f6-4827-9bce-1f6fffe0c0ca"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="No" mc="Standard.InformationFlow" uid="8c2fb3f5-64f9-4849-b583-df556266ba6e"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[No]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="38213827-560a-4816-9bdd-2096395aa87b"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="38213827-560a-4816-9bdd-2096395aa87b"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Si" mc="Standard.InformationFlow" uid="5d1935f5-1870-4ede-9edc-83b422da7699"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[Si]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="f70fb727-afc8-4d6a-983b-296e0a2cc43e"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="f70fb727-afc8-4d6a-983b-296e0a2cc43e"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="No" mc="Standard.InformationFlow" uid="81d99df9-810d-45e9-9136-4ba482e3f49a"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[No]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="7e942dce-27d7-4498-9582-1f3509fd3038"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="7e942dce-27d7-4498-9582-1f3509fd3038"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Si" mc="Standard.InformationFlow" uid="b86024a4-d346-4982-8294-37e484cd203e"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[Si]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="5e3fff35-6227-4351-8f72-18b94534a451"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="5e3fff35-6227-4351-8f72-18b94534a451"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="No" mc="Standard.InformationFlow" uid="79c9734d-e3bd-4334-a8a6-eade22d8abb7"/>
+          <ATTRIBUTES>
+            <ATT name="Name"><![CDATA[No]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="InformationSource">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="53b7b39e-5422-4a7f-9127-ec12125b87f4"/>
+              </REFOBJ>
+            </LINK>
+            <LINK relation="InformationTarget">
+              <REFOBJ>
+                <ID name="ControlFlow" mc="Standard.ControlFlow" uid="53b7b39e-5422-4a7f-9127-ec12125b87f4"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedElement">
+        <COMPID name="TN_Encargado" mc="Standard.Actor" uid="45f12bd5-a15c-4b35-8082-f719a3d2fa0a"/>
+        <COMPID name="Catalogo de productos y Servicios" mc="Standard.Class" uid="3f3adf6b-ffba-4209-a04e-708bed5c04f8"/>
+        <COMPID name="Registro de Venta" mc="Standard.Class" uid="1f4fb063-d748-4267-98cf-adcad9288b14"/>
+        <COMPID name="Pago" mc="Standard.Class" uid="d1f428a2-0297-4c76-ab8f-76b391d3fe35"/>
+        <COMPID name="Registro de inventario" mc="Standard.Class" uid="812f78bb-2f7e-41be-b6d3-14995e690a76"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCLAN_Ventas" mc="Standard.ClassDiagram" uid="4dad9263-53f8-4858-893a-89f6dcad34da"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

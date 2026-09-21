@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="0 Acceso" version="4">
+  <OBJECT>
+    <ID name="0 Acceso" mc="Standard.Package" uid="08dbee58-9ca2-4998-a907-723e795f5553"/>
+    <PID name="CASOS DE USO DEL SISTEMA" mc="Standard.Package" uid="73ecdb76-5153-4f38-a86d-6a0b97b81161"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[0 Acceso]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CUS_Iniciar Sesion" mc="Standard.UseCase" uid="937db766-c2a1-42fa-9f38-f28ecc20695d"/>
+        <COMPID name="CUS_Cerrar Sesion" mc="Standard.UseCase" uid="217574ee-ff4b-4199-ac93-feb1a921bdc9"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCUS_Acceso" mc="Standard.UseCaseDiagram" uid="ad195026-bdf8-45c0-b5d1-86e2e97ac53f"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Modelo de Casos de Uso de Negocio" version="4">
+  <OBJECT>
+    <ID name="Modelo de Casos de Uso de Negocio" mc="Standard.Package" uid="994a1d15-0028-42b8-8143-9e039d793e5a"/>
+    <PID name="Modelo de Negocio" mc="Standard.Package" uid="36cdf9bb-9008-4de1-8866-6f4329f7aa84"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Modelo de Casos de Uso de Negocio]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Ser una libreria reconocida por su buena gestion de ventas y rapida atencion al cliente" mc="Standard.Interface" uid="94df9c1f-38b3-487a-8606-dee604d8a42d"/>
+        <COMPID name="Ofrecer productos y servicios de libreria mediante una gestion automatizada y simple" mc="Standard.Interface" uid="5527cbe4-309a-43ad-9e0c-4083d6b80ca1"/>
+        <COMPID name="Mejorar la gestión de inventario, ventas y servicios a través de la automatización" mc="Standard.Interface" uid="b0936366-4418-48c8-adf3-5ccd730ca3b4"/>
+        <COMPID name="AN_Cliente" mc="Standard.Actor" uid="9d86d221-bbc3-43c4-88fa-6461390f93cc"/>
+        <COMPID name="Calcular automáticamente el total de cada venta y los ingresos
+   generados durante el día" mc="Standard.Interface" uid="7e05e8d1-750f-4832-bc69-7f4512f70fdf"/>
+        <COMPID name="Controlar el stock y actualizarlo después de las ventas y del
+   ingreso de mercadería" mc="Standard.Interface" uid="54e0170d-a776-49b4-85cf-37e63db8c66b"/>
+        <COMPID name="Agilizar el registro de ventas para reducir omisiones y errores" mc="Standard.Interface" uid="198cbd29-82ec-4150-a1d6-9fbe8b6c0df7"/>
+        <COMPID name="CUN_Atender venta y servicios" mc="Standard.UseCase" uid="b5b165e0-c10b-444b-ab0b-75dd6aaed9a8"/>
+        <COMPID name="CUN_Abastecer mercaderia" mc="Standard.UseCase" uid="38e4bd20-a915-4e0d-90c8-44dc380923e4"/>
+        <COMPID name="Gestionar la información de proveedores y apoyar el proceso
+   de abastecimiento" mc="Standard.Interface" uid="c7618041-2456-437f-807e-2f023cb3c416"/>
+        <COMPID name="Generar reportes de ventas, ingresos e inventario" mc="Standard.Interface" uid="58f70bb5-e99c-4426-841e-ab2afab8bcc7"/>
+        <COMPID name="Mejorar la organización y búsqueda de productos" mc="Standard.Interface" uid="5d82af47-e985-48c0-b47d-fb4bc64b7c00"/>
+        <COMPID name="CUN_Gestionar inventario" mc="Standard.UseCase" uid="c605f714-5f6c-471f-94ca-63b6b96007c6"/>
+        <COMPID name="AN_Encargado" mc="Standard.Actor" uid="1e7beb59-9af6-46c0-b3ef-81defe523056"/>
+        <COMPID name="AN_Proveedor" mc="Standard.Actor" uid="9fbdd637-a936-4504-886d-9995c77830bd"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCUN_Libreria" mc="Standard.UseCaseDiagram" uid="ed44a8bc-17d8-41bf-be12-6fa23a8592ee"/>
+        <COMPID name="DON_Libreria" mc="Standard.ClassDiagram" uid="6d8b7d30-bd8f-4234-8534-56b0786814d9"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

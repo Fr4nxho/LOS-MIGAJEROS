@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="3Gestionar Inventario" version="4">
+  <OBJECT>
+    <ID name="3Gestionar Inventario" mc="Standard.Package" uid="d073a109-460e-4a05-9e73-80e954926c80"/>
+    <PID name="CASOS DE USO DEL SISTEMA" mc="Standard.Package" uid="73ecdb76-5153-4f38-a86d-6a0b97b81161"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[3Gestionar Inventario]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CUS_Gestionar Productos" mc="Standard.UseCase" uid="066afa7c-b800-4583-8f76-916d83fae194"/>
+        <COMPID name="CUS_Buscar Productos" mc="Standard.UseCase" uid="900205d4-40dc-415c-bd9a-09c02058ad34"/>
+        <COMPID name="CUS_Consultar Stock" mc="Standard.UseCase" uid="8e0f07ab-323d-4173-8f02-58d87a400445"/>
+        <COMPID name="CUS_Realizar Ajuste de Inventario" mc="Standard.UseCase" uid="74f1ee18-bf99-40c1-948b-f07c4c554758"/>
+        <COMPID name="CUS_Generar Reporte de Inventario" mc="Standard.UseCase" uid="8ce0a3f2-39e1-44d0-b416-8c5cadec9c16"/>
+        <COMPID name="CUS_Exportar Inventario" mc="Standard.UseCase" uid="178ae5ea-3e4c-4740-a4ca-36d7c70093f8"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCUS_Inventario" mc="Standard.UseCaseDiagram" uid="fccb64cf-a675-48eb-beba-89c4fcda50ee"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Ofrecer productos y servicios de libreria mediante una gestion automatizada y simple" version="4">
+  <OBJECT>
+    <ID name="Ofrecer productos y servicios de libreria mediante una gestion automatizada y simple" mc="Standard.Interface" uid="5527cbe4-309a-43ad-9e0c-4083d6b80ca1"/>
+    <PID name="Modelo de Casos de Uso de Negocio" mc="Standard.Package" uid="994a1d15-0028-42b8-8143-9e039d793e5a"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">true</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Ofrecer productos y servicios de libreria mediante una gestion automatizada y simple]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="DependsOnDependency">
+        <OBJECT>
+          <ID name="" mc="Infrastructure.Dependency" uid="0a618f0d-0bdd-44d3-a6a5-8ea2298fb322"/>
+          <ATTRIBUTES>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="DependsOn">
+              <ID name="Ser una libreria reconocida por su buena gestion de ventas y rapida atencion al cliente" mc="Standard.Interface" uid="94df9c1f-38b3-487a-8606-dee604d8a42d"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="TN_Encargado" version="4">
+  <OBJECT>
+    <ID name="TN_Encargado" mc="Standard.Actor" uid="45f12bd5-a15c-4b35-8082-f719a3d2fa0a"/>
+    <PID name="1. Ventas" mc="Standard.Package" uid="c1964ed6-1928-40ab-b90f-49f6fedf4e22"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[TN_Encargado]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedEnd">
+        <REFOBJ>
+          <ID name="procesa el cobro del importe" mc="Standard.AssociationEnd" uid="878a9478-88d5-4ab6-8774-127698972ed4"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="Consulta disponibilidad y precios" mc="Standard.AssociationEnd" uid="3c09440a-adfb-4605-85d1-6c86f9656597"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="Recibe pago y da vuelto" mc="Standard.AssociationEnd" uid="7656e7a4-11d1-4897-9165-f76cfa84ce8c"/>
+        </REFOBJ>
+        <REFOBJ>
+          <ID name="decrementa stock por venta" mc="Standard.AssociationEnd" uid="4afa3991-54aa-447c-888a-676a65cf1934"/>
+        </REFOBJ>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

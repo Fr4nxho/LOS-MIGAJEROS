@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="2Abastecer Mercaderia" version="4">
+  <OBJECT>
+    <ID name="2Abastecer Mercaderia" mc="Standard.Package" uid="1f305748-b2e2-401a-bcdc-ed09454cb33f"/>
+    <PID name="CASOS DE USO DEL SISTEMA" mc="Standard.Package" uid="73ecdb76-5153-4f38-a86d-6a0b97b81161"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[2Abastecer Mercaderia]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CUS_Registrar Pedido a Proveedor" mc="Standard.UseCase" uid="f8788402-b903-48c5-9d69-bd67629047c0"/>
+        <COMPID name="CUS_Registrar Pago a Proveedor" mc="Standard.UseCase" uid="633c8bf6-d887-4d5c-a8d2-8845e100c8eb"/>
+        <COMPID name="CUS_Registrar Ingreso de Mercadería" mc="Standard.UseCase" uid="39a5f909-8b23-4c97-8b16-f143405fb3e1"/>
+        <COMPID name="CUS_Actualizar Inventario" mc="Standard.UseCase" uid="192f1c40-eb03-462a-8517-907463cdddbc"/>
+        <COMPID name="CUS_Gestionar Proveedor" mc="Standard.UseCase" uid="587bd7c8-7e5c-4c7b-828e-fb4375f668d8"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DCUS_Mercaderia" mc="Standard.UseCaseDiagram" uid="ca9d687f-3ff2-4406-9437-25b56b7a66bb"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
