@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+
+/* =========================
+   CABECERA
+========================= */
+
+header {
+    background-color: #1f4e78;
+    color: white;
+    padding: 20px;
+}
+
+header h1 {
+    margin-bottom: 15px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+section {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+section h2 {
+    margin-bottom: 18px;
+    color: #1f4e78;
+}
+
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #1f4e78;
+}
+
+
+/* =========================
+   BOTONES
+========================= */
+
+button {
+    background-color: #1f4e78;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #163a5c;
+}
+
+
+/* =========================
+   PRODUCTOS Y SERVICIOS
+========================= */
+
+#listaItems {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+#listaItems article {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+#listaItems article h3 {
+    color: #1f4e78;
+    margin-bottom: 10px;
+}
+
+#listaItems article p {
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   TABLA DE VENTA
+========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+thead {
+    background-color: #1f4e78;
+    color: white;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+
+/* =========================
+   RESUMEN
+========================= */
+
+#subtotal,
+#total {
+    font-size: 1.2rem;
+    color: #1f4e78;
+}
+
+#total {
+    font-size: 1.5rem;
+}
+
+
+/* =========================
+   MENSAJES
+========================= */
+
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   PIE DE PÁGINA
+========================= */
+
+footer {
+    background-color: #1f4e78;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    margin-top: 30px;
+}
+
+
+/* =========================
+   DISEÑO RESPONSIVO
+========================= */
+
+@media (max-width: 768px) {
+
+    main {
+        width: 95%;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    input,
+    select {
+        max-width: 100%;
+    }
+}

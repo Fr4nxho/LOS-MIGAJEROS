@@ -16,6 +16,8 @@
       <COMP relation="OwnedElement">
         <COMPID name="Modelo de Negocio" mc="Standard.Package" uid="36cdf9bb-9008-4de1-8866-6f4329f7aa84"/>
         <COMPID name="REQUISITOS" mc="Standard.Package" uid="025aee46-12cc-4c34-b63c-3410c17fc281"/>
+        <COMPID name="Modelo Conceptual" mc="Standard.Package" uid="a29f8a9c-0229-46bb-a966-48ee808ca8bb"/>
+        <COMPID name="Diagrama de Secuencia" mc="Standard.Package" uid="f254c21e-e0a5-42e8-a8c8-834acb494f22"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

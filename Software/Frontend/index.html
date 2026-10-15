@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrar Venta | Librería Bazar Rosita</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Librería Bazar Rosita</h1>
+
+        <nav>
+            <a href="#">Inicio</a>
+            <a href="#">Ventas</a>
+            <a href="#">Inventario</a>
+            <a href="#">Proveedores</a>
+            <a href="#">Reportes</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Registrar Venta</h2>
+
+            <div>
+                <label for="buscarItem">
+                    Buscar producto o servicio
+                </label>
+
+                <input
+                    type="text"
+                    id="buscarItem"
+                    placeholder="Ingrese el nombre del producto o servicio"
+                >
+
+                <button type="button" id="btnBuscar">
+                    Buscar
+                </button>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Productos y servicios disponibles</h2>
+
+            <div id="listaItems">
+                <!-- JavaScript mostrará aquí los productos y servicios -->
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Detalle de Venta</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ítem</th>
+                        <th>Tipo</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody id="detalleVenta">
+                    <!-- JavaScript agregará los elementos aquí -->
+                </tbody>
+            </table>
+        </section>
+
+
+        <section>
+            <h2>Resumen de Venta</h2>
+
+            <div>
+                <p>
+                    Subtotal:
+                    <strong id="subtotal">S/ 0.00</strong>
+                </p>
+
+                <label for="descuento">
+                    Descuento
+                </label>
+
+                <input
+                    type="number"
+                    id="descuento"
+                    min="0"
+                    value="0"
+                    step="0.10"
+                >
+
+                <p>
+                    Total:
+                    <strong id="total">S/ 0.00</strong>
+                </p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Pago</h2>
+
+            <div>
+                <label for="medioPago">
+                    Medio de pago
+                </label>
+
+                <select id="medioPago">
+                    <option value="">Seleccione</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="yape">Yape</option>
+                    <option value="plin">Plin</option>
+                </select>
+            </div>
+
+            <br>
+
+            <button type="button" id="btnRegistrarVenta">
+                Registrar Venta
+            </button>
+
+            <p id="mensaje"></p>
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            Sistema de Gestión para Librería Bazar Rosita
+        </p>
+    </footer>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>
