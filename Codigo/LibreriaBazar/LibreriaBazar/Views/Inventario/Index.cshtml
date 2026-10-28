@@ -1,0 +1,72 @@
+@model List<Producto>
+@{
+    ViewData["Title"] = "Inventario";
+    string? buscar = ViewBag.Buscar as string;
+    bool soloBajoStock = (bool)ViewBag.SoloBajoStock;
+}
+
+<h1>Inventario · stock disponible</h1>
+
+<div class="card">
+    <form asp-action="Index" method="get" class="filtros">
+        <div class="field">
+            <label for="buscar">Buscar producto</label>
+            <input type="text" id="buscar" name="buscar" value="@buscar" />
+        </div>
+        <div class="field">
+            <label><input type="checkbox" name="soloBajoStock" value="true" checked="@soloBajoStock" /> Solo stock bajo</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a class="btn" asp-action="Index">Limpiar</a>
+    </form>
+
+    <div class="actions" style="margin:0 0 14px">
+        <a class="btn btn-primary" asp-action="Ingreso">Ingreso de mercadería</a>
+        <a class="btn" asp-action="Ajuste">Ajuste de inventario</a>
+        <a class="btn" asp-action="Movimientos">Historial de movimientos</a>
+        <a class="btn" asp-controller="Reportes" asp-action="Inventario">Reporte de inventario</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p>No se encontraron productos.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th class="num">Stock</th>
+                        <th class="num">Mínimo</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.Nombre</td>
+                        <td>@p.Categoria?.Nombre</td>
+                        <td class="num"><strong>@p.Stock</strong></td>
+                        <td class="num">@p.StockMinimo</td>
+                        <td>
+                            @if (p.Stock == 0) { <span class="badge badge-error">Agotado</span> }
+                            else if (p.StockBajo) { <span class="badge badge-alerta">Stock bajo</span> }
+                            else { <span class="badge badge-ok">Normal</span> }
+                        </td>
+                        <td class="num">
+                            <a class="btn btn-sm" asp-action="Ingreso" asp-route-productoId="@p.Id">Ingreso</a>
+                            <a class="btn btn-sm" asp-action="Ajuste" asp-route-productoId="@p.Id">Ajustar</a>
+                            <a class="btn btn-sm" asp-controller="Pedidos" asp-action="Create" asp-route-productoId="@p.Id">Pedir</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

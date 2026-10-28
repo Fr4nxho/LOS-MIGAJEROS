@@ -1,0 +1,39 @@
+@model List<Categoria>
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<h1>Categorías de productos</h1>
+
+<div class="grid-2">
+    <section class="card">
+        <div class="tabla-wrap">
+            <table>
+                <thead><tr><th>Categoría</th><th class="num">Productos</th></tr></thead>
+                <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Nombre</td>
+                        <td class="num">@c.Productos.Count</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Nueva categoría</h2>
+        <form asp-action="Crear" method="post">
+            <div class="field">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" maxlength="60" required />
+            </div>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Agregar</button>
+                <a class="btn" asp-controller="Productos" asp-action="Index">Volver a productos</a>
+            </div>
+        </form>
+    </section>
+</div>

@@ -1,0 +1,76 @@
+@model ReporteInventarioViewModel
+@{
+    ViewData["Title"] = "Reporte de inventario";
+}
+
+<h1>Reportes</h1>
+
+<div class="actions no-imprimir" style="margin:0 0 16px">
+    <a class="btn" asp-action="Ventas">Reporte de ventas</a>
+    <a class="btn btn-primary" asp-action="Inventario">Reporte de inventario</a>
+</div>
+
+<div class="card no-imprimir">
+    <div class="actions" style="margin:0">
+        <a class="btn" asp-action="ExportarInventario">Exportar a Excel</a>
+        <button type="button" class="btn" onclick="window.print()">Imprimir / guardar como PDF</button>
+    </div>
+</div>
+
+<h2>Inventario al @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</h2>
+
+<div class="grid-3">
+    <div class="kpi">
+        <div class="valor">@Model.Productos.Count</div>
+        <div class="etiqueta">Productos activos</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.CantidadBajoStock</div>
+        <div class="etiqueta">Productos con stock bajo</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.ValorInventario.ToString("C2")</div>
+        <div class="etiqueta">Valor del inventario (a costo)</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="tabla-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th class="num">Stock</th>
+                    <th class="num">Mínimo</th>
+                    <th class="num">Costo</th>
+                    <th class="num">Valor en stock</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model.Productos)
+            {
+                <tr>
+                    <td>@p.Codigo</td>
+                    <td>@p.Nombre</td>
+                    <td>@p.Categoria?.Nombre</td>
+                    <td class="num">@p.Stock</td>
+                    <td class="num">@p.StockMinimo</td>
+                    <td class="num">@p.CostoUnitario.ToString("C2")</td>
+                    <td class="num">@((p.Stock * p.CostoUnitario).ToString("C2"))</td>
+                    <td>
+                        @if (p.Stock == 0) { <span class="badge badge-error">Agotado</span> }
+                        else if (p.StockBajo) { <span class="badge badge-alerta">Stock bajo</span> }
+                        else { <span class="badge badge-ok">Normal</span> }
+                    </td>
+                </tr>
+            }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="6">Valor total del inventario</td><td class="num">@Model.ValorInventario.ToString("C2")</td><td></td></tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

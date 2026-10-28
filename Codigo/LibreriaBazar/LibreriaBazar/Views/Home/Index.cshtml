@@ -1,0 +1,84 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1>Resumen del día · @DateTime.Today.ToString("dd/MM/yyyy")</h1>
+
+<div class="grid-3">
+    <div class="kpi">
+        <div class="valor">@Model.VentasHoy</div>
+        <div class="etiqueta">Ventas registradas hoy</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.IngresosHoy.ToString("C2")</div>
+        <div class="etiqueta">Ingresos del día (productos y servicios)</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.TotalProductos</div>
+        <div class="etiqueta">Productos activos en catálogo</div>
+    </div>
+</div>
+
+<div class="actions" style="margin-bottom:20px">
+    <a class="btn btn-primary" asp-controller="Ventas" asp-action="Create">Registrar nueva venta</a>
+    <a class="btn" asp-controller="Inventario" asp-action="Ingreso">Ingresar mercadería</a>
+    <a class="btn" asp-controller="Pedidos" asp-action="Create">Nuevo pedido a proveedor</a>
+</div>
+
+<div class="grid-2">
+    <section class="card">
+        <h2>Productos con stock bajo</h2>
+        @if (!Model.BajoStock.Any())
+        {
+            <p>No hay productos con stock bajo.</p>
+        }
+        else
+        {
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Producto</th><th class="num">Stock</th><th class="num">Mínimo</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var p in Model.BajoStock)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td class="num"><span class="badge badge-error">@p.Stock</span></td>
+                            <td class="num">@p.StockMinimo</td>
+                            <td><a class="btn btn-sm" asp-controller="Pedidos" asp-action="Create" asp-route-productoId="@p.Id">Pedir</a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section class="card">
+        <h2>Últimas ventas de hoy</h2>
+        @if (!Model.UltimasVentas.Any())
+        {
+            <p>Todavía no se registran ventas hoy.</p>
+        }
+        else
+        {
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>N°</th><th>Hora</th><th class="num">Total</th></tr></thead>
+                    <tbody>
+                    @foreach (var v in Model.UltimasVentas)
+                    {
+                        <tr>
+                            <td><a asp-controller="Ventas" asp-action="Details" asp-route-id="@v.Id">#@v.Id</a></td>
+                            <td>@v.Fecha.ToString("HH:mm")</td>
+                            <td class="num">@v.Total.ToString("C2")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+</div>

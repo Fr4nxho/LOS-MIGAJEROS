@@ -1,0 +1,162 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.EditarItemViewModel
+
+@{
+    ViewData["Title"] = "Modificar producto o servicio";
+}
+
+<div class="container mt-4">
+
+    <h2>Modificar producto o servicio</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form asp-controller="Catalogo"
+                  asp-action="Editar"
+                  asp-route-id="@Model.IdItem"
+                  method="post">
+
+                <input type="hidden" asp-for="IdItem" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Identificador
+                    </label>
+
+                    <input value="@Model.IdItem"
+                           class="form-control"
+                           readonly />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Tipo de ítem
+                    </label>
+
+                    <input value="@Model.TipoItem"
+                           class="form-control"
+                           readonly />
+
+                    <div class="form-text">
+                        El tipo de ítem no puede modificarse.
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Nombre"
+                           class="form-label"></label>
+
+                    <input asp-for="Nombre"
+                           class="form-control" />
+
+                    <span asp-validation-for="Nombre"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Precio"
+                           class="form-label"></label>
+
+                    <input asp-for="Precio"
+                           type="number"
+                           min="0"
+                           max="99999999.99"
+                           step="0.01"
+                           class="form-control" />
+
+                    <span asp-validation-for="Precio"
+                          class="text-danger"></span>
+
+                </div>
+
+                @if (Model.TipoItem == "PRODUCTO")
+                {
+                    <hr />
+
+                    <h5>Datos del producto</h5>
+
+                    <div class="mb-3">
+
+                        <label asp-for="IdCategoria"
+                               class="form-label"></label>
+
+                        <select asp-for="IdCategoria"
+                                asp-items="ViewBag.Categorias"
+                                class="form-select">
+
+                            <option value="">
+                                Seleccione una categoría
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="IdCategoria"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label asp-for="StockMinimo"
+                               class="form-label"></label>
+
+                        <input asp-for="StockMinimo"
+                               type="number"
+                               min="0"
+                               step="1"
+                               class="form-control" />
+
+                        <span asp-validation-for="StockMinimo"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="alert alert-info">
+                        El stock actual no se modifica aquí.
+                        Para corregirlo debe utilizarse
+                        la función Ajuste de Inventario.
+                    </div>
+                }
+
+                <div class="d-flex gap-2 mt-4">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+
+                    <a asp-controller="Catalogo"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

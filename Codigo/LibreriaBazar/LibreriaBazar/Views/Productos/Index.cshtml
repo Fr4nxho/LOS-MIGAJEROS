@@ -1,0 +1,87 @@
+@model List<Producto>
+@{
+    ViewData["Title"] = "Productos";
+    string? buscar = ViewBag.Buscar as string;
+    bool incluirInactivos = (bool)ViewBag.IncluirInactivos;
+}
+
+<h1>Productos</h1>
+
+<div class="card">
+    <form asp-action="Index" method="get" class="filtros">
+        <div class="field">
+            <label for="buscar">Buscar por nombre</label>
+            <input type="text" id="buscar" name="buscar" value="@buscar" placeholder="Ej.: cuaderno" />
+        </div>
+        <div class="field">
+            <label for="categoriaId">Categoría</label>
+            <select id="categoriaId" name="categoriaId" asp-items="(SelectList)ViewBag.Categorias">
+                <option value="">Todas las categorías</option>
+            </select>
+        </div>
+        <div class="field">
+            <label><input type="checkbox" name="incluirInactivos" value="true" checked="@incluirInactivos" /> Mostrar inactivos</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a class="btn" asp-action="Index">Limpiar</a>
+    </form>
+
+    <div class="actions" style="margin:0 0 14px">
+        <a class="btn btn-primary" asp-action="Create">Nuevo producto</a>
+        <a class="btn" asp-controller="Categorias" asp-action="Index">Categorías</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p>No se encontraron productos con esos criterios.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th class="num">Precio</th>
+                        <th class="num">Stock</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr class="@(p.Activo ? "" : "inactivo")">
+                        <td>@p.Codigo</td>
+                        <td>@p.Nombre</td>
+                        <td>@p.Categoria?.Nombre</td>
+                        <td class="num">@p.PrecioVenta.ToString("C2")</td>
+                        <td class="num">
+                            @if (p.StockBajo)
+                            {
+                                <span class="badge badge-error" title="Stock bajo">@p.Stock</span>
+                            }
+                            else
+                            {
+                                @p.Stock
+                            }
+                        </td>
+                        <td>
+                            @if (p.Activo) { <span class="badge badge-ok">Activo</span> }
+                            else { <span class="badge badge-gris">Inactivo</span> }
+                        </td>
+                        <td class="num">
+                            <a class="btn btn-sm" asp-action="Edit" asp-route-id="@p.Id">Editar</a>
+                            <form asp-action="CambiarEstado" asp-route-id="@p.Id" method="post" class="inline">
+                                <button type="submit" class="btn btn-sm @(p.Activo ? "btn-danger" : "")">@(p.Activo ? "Desactivar" : "Reactivar")</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

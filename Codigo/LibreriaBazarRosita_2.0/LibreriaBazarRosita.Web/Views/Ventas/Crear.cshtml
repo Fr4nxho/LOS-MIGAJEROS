@@ -1,0 +1,520 @@
+﻿@using System.Globalization
+@using LibreriaBazarRosita.Web.Models.Entities
+@model LibreriaBazarRosita.Web.Models.ViewModels.RegistrarVentaViewModel
+
+@{
+    ViewData["Title"] = "Registrar venta";
+
+    var items = ViewBag.Items as List<ItemCatalogo>
+        ?? new List<ItemCatalogo>();
+
+    var detalles = Model.Detalles
+        ?? new List<LibreriaBazarRosita.Web.Models.ViewModels.DetalleRegistrarVentaViewModel>();
+}
+
+<div class="container mt-4">
+
+    <h2>Registrar venta</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    <div class="alert alert-info">
+        Puede registrar productos, servicios o ambos
+        dentro de una misma venta.
+    </div>
+
+    <form asp-controller="Ventas"
+          asp-action="Crear"
+          method="post">
+
+        <div asp-validation-summary="All"
+             class="text-danger mb-3"></div>
+
+        <h5>Detalle de la venta</h5>
+
+        <div id="listaDetalles">
+
+            @for (int indice = 0; indice < detalles.Count; indice++)
+            {
+                var detalle = detalles[indice];
+
+                <div class="row g-2 align-items-end mb-3 fila-detalle">
+
+                    <input type="hidden"
+                           name="Detalles.Index"
+                           value="@indice" />
+
+                    <div class="col-md-7">
+
+                        <label class="form-label">
+                            Producto o servicio
+                        </label>
+
+                        <select name="Detalles[@indice].IdItem"
+                                class="form-select selector-item"
+                                required>
+
+                            <option value="">
+                                Seleccione un ítem
+                            </option>
+
+                            @foreach (var item in items)
+                            {
+                                <option value="@item.IdItem"
+                                        data-precio="@item.Precio.ToString(CultureInfo.InvariantCulture)"
+                                        data-tipo="@item.TipoItem"
+                                        data-stock="@(item.Producto?.StockActual)"
+                                        selected="@(detalle.IdItem == item.IdItem)">
+
+                                    @item.Nombre - @item.TipoItem -
+                                    S/ @item.Precio.ToString("0.00")
+
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Cantidad
+                        </label>
+
+                        <input type="number"
+                               name="Detalles[@indice].Cantidad"
+                               class="form-control cantidad-item"
+                               min="1"
+                               max="2147483647"
+                               value="@detalle.Cantidad"
+                               required />
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button type="button"
+                                class="btn btn-outline-danger w-100 quitarDetalle">
+
+                            Quitar
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+        <button type="button"
+                id="agregarDetalle"
+                class="btn btn-outline-primary mb-4">
+
+            Agregar otro ítem
+
+        </button>
+
+        <hr />
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+
+                <label asp-for="Descuento"
+                       class="form-label">
+                    Descuento (S/)
+                </label>
+
+                <input asp-for="Descuento"
+                       type="number"
+                       min="0"
+                       step="0.01"
+                       class="form-control" />
+
+                <span asp-validation-for="Descuento"
+                      class="text-danger"></span>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label asp-for="MedioPago"
+                       class="form-label">
+                    Medio de pago
+                </label>
+
+                <select asp-for="MedioPago"
+                        class="form-select">
+
+                    <option value="EFECTIVO">Efectivo</option>
+                    <option value="YAPE">Yape</option>
+                    <option value="PLIN">Plin</option>
+                    <option value="TRANSFERENCIA">
+                        Transferencia
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="MedioPago"
+                      class="text-danger"></span>
+
+            </div>
+
+        </div>
+
+        <!-- RESUMEN DE LA VENTA -->
+
+        <div class="card mt-4 mb-4">
+
+            <div class="card-header">
+                <strong>Resumen de la venta</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal estimado</span>
+                    <strong id="subtotalVista">S/ 0.00</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Descuento</span>
+                    <strong id="descuentoVista">S/ 0.00</strong>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+                    <strong>Total estimado</strong>
+                    <h4 id="totalVista">S/ 0.00</h4>
+                </div>
+
+                <small class="text-muted">
+                    El servidor volverá a calcular los precios
+                    y verificará el stock al confirmar.
+                </small>
+
+            </div>
+
+        </div>
+
+        <div id="advertenciaStock"
+             class="alert alert-warning d-none">
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+
+            Confirmar venta
+
+        </button>
+
+        <a asp-controller="Catalogo"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            Volver al catálogo
+
+        </a>
+
+    </form>
+
+</div>
+
+<!-- PLANTILLA PARA NUEVAS LÍNEAS -->
+
+<template id="plantillaDetalle">
+
+    <div class="row g-2 align-items-end mb-3 fila-detalle">
+
+        <input type="hidden"
+               name="Detalles.Index"
+               value="__index__" />
+
+        <div class="col-md-7">
+
+            <label class="form-label">
+                Producto o servicio
+            </label>
+
+            <select name="Detalles[__index__].IdItem"
+                    class="form-select selector-item"
+                    required>
+
+                <option value="">
+                    Seleccione un ítem
+                </option>
+
+                @foreach (var item in items)
+                {
+                    <option value="@item.IdItem"
+                            data-precio="@item.Precio.ToString(CultureInfo.InvariantCulture)"
+                            data-tipo="@item.TipoItem"
+                            data-stock="@(item.Producto?.StockActual)">
+
+                        @item.Nombre - @item.TipoItem -
+                        S/ @item.Precio.ToString("0.00")
+
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <label class="form-label">
+                Cantidad
+            </label>
+
+            <input type="number"
+                   name="Detalles[__index__].Cantidad"
+                   class="form-control cantidad-item"
+                   min="1"
+                   max="2147483647"
+                   value="1"
+                   required />
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="button"
+                    class="btn btn-outline-danger w-100 quitarDetalle">
+
+                Quitar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</template>
+
+@section Scripts {
+
+    <script>
+
+        const listaDetalles =
+            document.getElementById("listaDetalles");
+
+        const plantilla =
+            document.getElementById("plantillaDetalle");
+
+        const descuentoInput =
+            document.getElementById("Descuento");
+
+        let siguienteIndice = @detalles.Count;
+
+        // ==========================================
+        // AGREGAR OTRO PRODUCTO O SERVICIO
+        // ==========================================
+
+        document.getElementById("agregarDetalle")
+            .addEventListener("click", function () {
+
+                const fragmento =
+                    plantilla.content.cloneNode(true);
+
+                fragmento.querySelectorAll("[name]")
+                    .forEach(function (campo) {
+
+                        campo.name = campo.name.replaceAll(
+                            "__index__",
+                            siguienteIndice
+                        );
+
+                        if (campo.name === "Detalles.Index") {
+                            campo.value = siguienteIndice;
+                        }
+                    });
+
+                listaDetalles.appendChild(fragmento);
+
+                siguienteIndice++;
+
+                actualizarBotones();
+                actualizarResumen();
+            });
+
+        // ==========================================
+        // QUITAR UNA LÍNEA
+        // ==========================================
+
+        listaDetalles.addEventListener(
+            "click",
+            function (evento) {
+
+                const boton =
+                    evento.target.closest(".quitarDetalle");
+
+                if (!boton) {
+                    return;
+                }
+
+                const filas =
+                    listaDetalles.querySelectorAll(".fila-detalle");
+
+                if (filas.length > 1) {
+                    boton.closest(".fila-detalle").remove();
+                }
+
+                actualizarBotones();
+                actualizarResumen();
+            });
+
+        function actualizarBotones() {
+
+            const filas =
+                listaDetalles.querySelectorAll(".fila-detalle");
+
+            filas.forEach(function (fila) {
+
+                fila.querySelector(".quitarDetalle").disabled =
+                    filas.length === 1;
+
+            });
+        }
+
+        // ==========================================
+        // CALCULAR TOTALES VISUALES
+        // ==========================================
+
+        function actualizarResumen() {
+
+            let subtotal = 0;
+
+            const productos = new Map();
+
+            const filas =
+                listaDetalles.querySelectorAll(".fila-detalle");
+
+            filas.forEach(function (fila) {
+
+                const selector =
+                    fila.querySelector(".selector-item");
+
+                const cantidadInput =
+                    fila.querySelector(".cantidad-item");
+
+                const opcion =
+                    selector.selectedOptions[0];
+
+                if (!opcion || !opcion.value) {
+                    return;
+                }
+
+                const cantidad = Number(cantidadInput.value);
+                const precio = Number(opcion.dataset.precio);
+
+                if (!Number.isInteger(cantidad) ||
+                    cantidad <= 0 ||
+                    !Number.isFinite(precio)) {
+                    return;
+                }
+
+                subtotal += cantidad * precio;
+
+                // Acumular cantidades de productos repetidos.
+                if (opcion.dataset.tipo === "PRODUCTO") {
+
+                    const id = opcion.value;
+
+                    const anterior =
+                        productos.get(id) ?? {
+                            nombre: opcion.textContent.trim(),
+                            cantidad: 0,
+                            stock: Number(opcion.dataset.stock)
+                        };
+
+                    anterior.cantidad += cantidad;
+
+                    productos.set(id, anterior);
+                }
+            });
+
+            const descuento =
+                Number(descuentoInput.value) || 0;
+
+            const total = subtotal - descuento;
+
+            document.getElementById("subtotalVista")
+                .textContent = "S/ " + subtotal.toFixed(2);
+
+            document.getElementById("descuentoVista")
+                .textContent = "S/ " + descuento.toFixed(2);
+
+            document.getElementById("totalVista")
+                .textContent = "S/ " + total.toFixed(2);
+
+            // Advertir si se intenta vender más del stock.
+            const advertencia =
+                document.getElementById("advertenciaStock");
+
+            const insuficientes = [];
+
+            productos.forEach(function (producto) {
+
+                if (producto.cantidad > producto.stock) {
+
+                    insuficientes.push(
+                        producto.nombre +
+                        " (disponible: " + producto.stock + ")"
+                    );
+                }
+            });
+
+            if (insuficientes.length > 0) {
+
+                advertencia.textContent =
+                    "Stock insuficiente: " +
+                    insuficientes.join("; ");
+
+                advertencia.classList.remove("d-none");
+            }
+            else {
+
+                advertencia.textContent = "";
+                advertencia.classList.add("d-none");
+            }
+        }
+
+        // ==========================================
+        // ESCUCHAR CAMBIOS DEL FORMULARIO
+        // ==========================================
+
+        listaDetalles.addEventListener(
+            "change",
+            actualizarResumen
+        );
+
+        listaDetalles.addEventListener(
+            "input",
+            actualizarResumen
+        );
+
+        descuentoInput.addEventListener(
+            "input",
+            actualizarResumen
+        );
+
+        // Estado inicial.
+        actualizarBotones();
+        actualizarResumen();
+
+    </script>
+
+}

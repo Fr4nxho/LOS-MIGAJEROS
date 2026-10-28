@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Copia de respaldo";
+    string carpeta = ViewBag.Carpeta as string ?? "";
+}
+
+<h1>Copia de respaldo de la información</h1>
+
+<form asp-action="Respaldo" method="post" class="card">
+    <p>Genera un archivo <strong>.bak</strong> con toda la información del sistema (ventas, inventario, proveedores, etc.). Guarde la copia en una unidad externa (USB o disco) y repita el proceso periódicamente.</p>
+
+    <div class="field">
+        <label for="carpeta">Carpeta de destino</label>
+        <input type="text" id="carpeta" name="carpeta" value="@carpeta" />
+        <span class="ayuda">La carpeta se crea si no existe. SQL Server debe tener permiso de escritura en ella.</span>
+    </div>
+
+    <div class="actions">
+        <button type="submit" class="btn btn-primary">Generar copia de respaldo</button>
+    </div>
+</form>

@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="card">
+    <h1>Ocurrió un error</h1>
+    <p>No se pudo completar la operación. Intente nuevamente; si el problema continúa, informe al responsable del sistema.</p>
+    @if (ViewData["RequestId"] is string requestId)
+    {
+        <p class="ayuda">Código de seguimiento: <code>@requestId</code></p>
+    }
+    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Volver al inicio</a>
+</div>

@@ -1,0 +1,183 @@
+@model PedidoCreateViewModel
+@{
+    ViewData["Title"] = "Nuevo pedido";
+    var inicial = Model.Lineas.Select(l => new { id = l.ProductoId, cantidad = l.Cantidad, costo = l.CostoUnitario }).ToList();
+}
+
+<h1>Nuevo pedido a proveedor</h1>
+
+<form asp-action="Create" method="post" id="formPedido">
+    <div asp-validation-summary="All" class="alert alert-error"></div>
+
+    <div class="grid-2">
+        <section class="card">
+            <h2>1. Productos a pedir</h2>
+
+            <div class="form-grid">
+                <div class="field completo">
+                    <label for="selProducto">Producto</label>
+                    <select id="selProducto">
+                        <option value="">— Seleccione —</option>
+                        @foreach (var p in Model.Productos)
+                        {
+                            <option value="@p.Id" data-nombre="@p.Nombre" data-costo="@p.CostoUnitario.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)">@p.Nombre · stock: @p.Stock (mín. @p.StockMinimo)</option>
+                        }
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="txtCantidad">Cantidad</label>
+                    <input type="number" id="txtCantidad" value="1" min="1" step="1" />
+                </div>
+                <div class="field">
+                    <label for="txtCosto">Costo unitario (S/)</label>
+                    <input type="number" id="txtCosto" value="0.00" min="0" step="0.01" />
+                </div>
+                <div class="field">
+                    <button type="button" id="btnAgregar" class="btn btn-primary">Agregar al pedido</button>
+                </div>
+            </div>
+
+            <h2 style="margin-top:22px">Detalle del pedido</h2>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class="num">Cant.</th>
+                            <th class="num">Costo unit.</th>
+                            <th class="num">Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyLineas"></tbody>
+                    <tfoot>
+                        <tr><td colspan="3">Total del pedido</td><td class="num" id="lblTotal">S/ 0.00</td><td></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div id="lineasHidden"></div>
+        </section>
+
+        <section class="card">
+            <h2>2. Proveedor</h2>
+
+            <div class="field">
+                <label asp-for="ProveedorId"></label>
+                <select asp-for="ProveedorId" asp-items="(SelectList)ViewBag.Proveedores">
+                    <option value="0">— Seleccione —</option>
+                </select>
+                <span asp-validation-for="ProveedorId" class="field-error"></span>
+            </div>
+
+            <div class="field" style="margin-top:12px">
+                <label asp-for="Observacion">Observación</label>
+                <input asp-for="Observacion" maxlength="200" />
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary" style="flex:1">Registrar pedido</button>
+                <a class="btn" asp-action="Index">Cancelar</a>
+            </div>
+        </section>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+    (function () {
+        var sel = document.getElementById('selProducto');
+        var cant = document.getElementById('txtCantidad');
+        var costo = document.getElementById('txtCosto');
+        var btn = document.getElementById('btnAgregar');
+        var tbody = document.getElementById('tbodyLineas');
+        var hidden = document.getElementById('lineasHidden');
+        var lblTotal = document.getElementById('lblTotal');
+        var form = document.getElementById('formPedido');
+        var lineas = [];
+
+        function fmt(n) { return 'S/ ' + n.toFixed(2); }
+
+        sel.addEventListener('change', function () {
+            var opt = sel.options[sel.selectedIndex];
+            if (opt && opt.dataset.costo) { costo.value = opt.dataset.costo; }
+        });
+
+        function agregar(id, cantidad, c) {
+            var opt = sel.querySelector('option[value="' + id + '"]');
+            if (!opt) { return; }
+            var existente = lineas.filter(function (l) { return l.id === id; })[0];
+            if (existente) {
+                existente.cantidad += cantidad;
+                existente.costo = c;
+            } else {
+                lineas.push({ id: id, nombre: opt.dataset.nombre, cantidad: cantidad, costo: c });
+            }
+            render();
+        }
+
+        function render() {
+            tbody.innerHTML = '';
+            hidden.innerHTML = '';
+            var total = 0;
+
+            lineas.forEach(function (l, i) {
+                var st = l.cantidad * l.costo;
+                total += st;
+
+                var tr = document.createElement('tr');
+                function celda(texto, clase) {
+                    var td = document.createElement('td');
+                    td.textContent = texto;
+                    if (clase) { td.className = clase; }
+                    tr.appendChild(td);
+                }
+                celda(l.nombre);
+                celda(String(l.cantidad), 'num');
+                celda(fmt(l.costo), 'num');
+                celda(fmt(st), 'num');
+
+                var tdBtn = document.createElement('td');
+                tdBtn.className = 'num';
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'btn btn-sm btn-danger';
+                b.textContent = 'Quitar';
+                b.addEventListener('click', function () { lineas.splice(i, 1); render(); });
+                tdBtn.appendChild(b);
+                tr.appendChild(tdBtn);
+                tbody.appendChild(tr);
+
+                hidden.insertAdjacentHTML('beforeend',
+                    '<input type="hidden" name="Lineas[' + i + '].ProductoId" value="' + l.id + '" />' +
+                    '<input type="hidden" name="Lineas[' + i + '].Cantidad" value="' + l.cantidad + '" />' +
+                    '<input type="hidden" name="Lineas[' + i + '].CostoUnitario" value="' + l.costo.toFixed(2) + '" />');
+            });
+
+            lblTotal.textContent = fmt(total);
+        }
+
+        btn.addEventListener('click', function () {
+            if (!sel.value) { alert('Seleccione un producto.'); return; }
+            var c = parseInt(cant.value, 10);
+            var k = parseFloat(costo.value);
+            if (isNaN(c) || c < 1) { alert('La cantidad debe ser un número entero mayor que 0.'); return; }
+            if (isNaN(k) || k < 0) { alert('Ingrese un costo unitario válido.'); return; }
+            agregar(parseInt(sel.value, 10), c, k);
+            cant.value = 1;
+            sel.value = '';
+            costo.value = '0.00';
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (lineas.length === 0) {
+                e.preventDefault();
+                alert('Agregue al menos un producto al pedido.');
+            }
+        });
+
+        var inicial = @Html.Raw(Json.Serialize(inicial));
+        inicial.forEach(function (l) { agregar(l.id, l.cantidad, l.costo); });
+        render();
+    })();
+    </script>
+}

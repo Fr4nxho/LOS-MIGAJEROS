@@ -1,0 +1,47 @@
+@model List<Proveedor>
+@{
+    ViewData["Title"] = "Proveedores";
+    bool incluirInactivos = (bool)ViewBag.IncluirInactivos;
+}
+
+<h1>Proveedores</h1>
+
+<div class="card">
+    <form asp-action="Index" method="get" class="filtros">
+        <div class="field">
+            <label><input type="checkbox" name="incluirInactivos" value="true" checked="@incluirInactivos" /> Mostrar inactivos</label>
+        </div>
+        <button type="submit" class="btn">Aplicar</button>
+        <a class="btn btn-primary" asp-action="Create">Nuevo proveedor</a>
+        <a class="btn" asp-controller="Pedidos" asp-action="Create">Nuevo pedido</a>
+    </form>
+
+    <div class="tabla-wrap">
+        <table>
+            <thead>
+                <tr><th>Proveedor</th><th>RUC</th><th>Teléfono</th><th>Correo</th><th>Estado</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model)
+            {
+                <tr class="@(p.Activo ? "" : "inactivo")">
+                    <td>@p.Nombre</td>
+                    <td>@p.Ruc</td>
+                    <td>@p.Telefono</td>
+                    <td>@p.Correo</td>
+                    <td>
+                        @if (p.Activo) { <span class="badge badge-ok">Activo</span> }
+                        else { <span class="badge badge-gris">Inactivo</span> }
+                    </td>
+                    <td class="num">
+                        <a class="btn btn-sm" asp-action="Edit" asp-route-id="@p.Id">Editar</a>
+                        <form asp-action="CambiarEstado" asp-route-id="@p.Id" method="post" class="inline">
+                            <button type="submit" class="btn btn-sm @(p.Activo ? "btn-danger" : "")">@(p.Activo ? "Desactivar" : "Reactivar")</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,303 @@
+﻿@model IEnumerable<LibreriaBazarRosita.Web.Models.Entities.ItemCatalogo>
+
+@{
+    ViewData["Title"] = "Reporte de inventario";
+
+    var productos = Model.ToList();
+
+    var busqueda = ViewBag.Busqueda as string ?? "";
+    var estadoSeleccionado = ViewBag.EstadoStock as string ?? "";
+
+    DateTime fechaGeneracion = ViewBag.FechaGeneracion;
+
+    int totalProductos = productos.Count;
+
+    int totalUnidades = productos.Sum(i =>
+        i.Producto?.StockActual ?? 0);
+
+    int disponibles = productos.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual > i.Producto.StockMinimo);
+
+    int stockBajo = productos.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual > 0 &&
+        i.Producto.StockActual <= i.Producto.StockMinimo);
+
+    int agotados = productos.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual == 0);
+}
+
+<div class="container mt-4">
+
+    <h2>Reporte de inventario</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+    <p>
+        <strong>Fecha de generación:</strong>
+        @fechaGeneracion.ToString("dd/MM/yyyy HH:mm")
+    </p>
+
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info" role="alert">
+            @TempData["Info"]
+        </div>
+    }
+
+
+    <!-- FILTROS DEL REPORTE -->
+
+    <form asp-controller="Inventario"
+          asp-action="Reporte"
+          method="get"
+          class="row g-3 mb-4">
+
+        <div class="col-md-5">
+
+            <label for="busqueda" class="form-label">
+                Buscar producto
+            </label>
+
+            <input type="search"
+                   id="busqueda"
+                   name="busqueda"
+                   value="@busqueda"
+                   class="form-control"
+                   placeholder="Ejemplo: Cuaderno" />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <label for="estadoStock" class="form-label">
+                Estado del stock
+            </label>
+
+            <select id="estadoStock"
+                    name="estadoStock"
+                    class="form-select">
+
+                <option value="">Todos</option>
+
+                <option value="DISPONIBLE"
+                        selected="@(estadoSeleccionado == "DISPONIBLE")">
+                    Disponible
+                </option>
+
+                <option value="BAJO"
+                        selected="@(estadoSeleccionado == "BAJO")">
+                    Stock bajo
+                </option>
+
+                <option value="AGOTADO"
+                        selected="@(estadoSeleccionado == "AGOTADO")">
+                    Agotado
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Generar reporte
+            </button>
+
+            <a asp-controller="Inventario"
+               asp-action="Reporte"
+               class="btn btn-outline-secondary">
+                Limpiar
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <!-- EXPORTAR REPORTE -->
+
+    <div class="mb-4">
+
+        <form asp-controller="Inventario"
+              asp-action="Exportar"
+              method="get">
+
+            <input type="hidden"
+                   name="busqueda"
+                   value="@busqueda" />
+
+            <input type="hidden"
+                   name="estadoStock"
+                   value="@estadoSeleccionado" />
+
+            <input type="hidden"
+                   name="formato"
+                   value="CSV" />
+
+            <button type="submit"
+                    class="btn btn-success">
+
+                Exportar a CSV (Excel)
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- RESUMEN DEL REPORTE -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h6>Productos</h6>
+                    <h3>@totalProductos</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-secondary">
+                <div class="card-body">
+                    <h6>Unidades en stock</h6>
+                    <h3>@totalUnidades</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body">
+                    <h6>Stock bajo</h6>
+                    <h3>@stockBajo</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h6>Agotados</h6>
+                    <h3>@agotados</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p>
+        <strong>Productos disponibles:</strong> @disponibles
+    </p>
+
+    <!-- DETALLE DEL REPORTE -->
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock actual</th>
+                    <th>Stock mínimo</th>
+                    <th>Faltantes para el mínimo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (productos.Any())
+                {
+                    @foreach (var item in productos)
+                    {
+                        var producto = item.Producto!;
+
+                        int faltantes = Math.Max(
+                        0,
+                        producto.StockMinimo -
+                        producto.StockActual);
+
+                        <tr>
+
+                            <td>@item.IdItem</td>
+
+                            <td>@item.Nombre</td>
+
+                            <td>
+                                @producto.IdCategoriaNavigation.Nombre
+                            </td>
+
+                            <td>@producto.StockActual</td>
+
+                            <td>@producto.StockMinimo</td>
+
+                            <td>@faltantes</td>
+
+                            <td>
+                                @if (producto.StockActual == 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        Agotado
+                                    </span>
+                                }
+                                else if (
+                                producto.StockActual <=
+                                producto.StockMinimo)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Stock bajo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        Disponible
+                                    </span>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7"
+                            class="text-center text-muted py-4">
+
+                            No existen productos que cumplan
+                            con los criterios del reporte.
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <a asp-controller="Inventario"
+       asp-action="Index"
+       class="btn btn-outline-secondary mt-3">
+
+        Volver al inventario
+
+    </a>
+
+</div>

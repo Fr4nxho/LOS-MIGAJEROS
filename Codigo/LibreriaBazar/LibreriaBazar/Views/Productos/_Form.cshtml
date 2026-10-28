@@ -1,0 +1,71 @@
+@model Producto
+@{
+    var edicion = ViewData["Edicion"] as bool? ?? false;
+}
+
+<div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+<input type="hidden" asp-for="Id" />
+
+<div class="form-grid">
+    <div class="field">
+        <label asp-for="Codigo"></label>
+        <input asp-for="Codigo" maxlength="30" />
+        <span asp-validation-for="Codigo" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" maxlength="120" />
+        <span asp-validation-for="Nombre" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="CategoriaId"></label>
+        <select asp-for="CategoriaId" asp-items="(SelectList)ViewBag.Categorias">
+            <option value="0">— Seleccione —</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="PrecioVenta"></label>
+        <input asp-for="PrecioVenta" type="number" step="0.01" min="0.01" />
+        <span asp-validation-for="PrecioVenta" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="CostoUnitario"></label>
+        <input asp-for="CostoUnitario" type="number" step="0.01" min="0" />
+        <span asp-validation-for="CostoUnitario" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="StockMinimo"></label>
+        <input asp-for="StockMinimo" type="number" step="1" min="0" />
+        <span asp-validation-for="StockMinimo" class="field-error"></span>
+        <span class="ayuda">Al llegar a esta cantidad el sistema avisa que hay stock bajo.</span>
+    </div>
+
+    @if (!edicion)
+    {
+        <div class="field">
+            <label asp-for="Stock">Stock inicial</label>
+            <input asp-for="Stock" type="number" step="1" min="0" />
+            <span asp-validation-for="Stock" class="field-error"></span>
+        </div>
+    }
+    else
+    {
+        <div class="field">
+            <label>Stock actual</label>
+            <input type="text" value="@Model.Stock" disabled />
+            <span class="ayuda">El stock se modifica desde Inventario (ingresos y ajustes).</span>
+        </div>
+    }
+
+    <div class="field completo">
+        <label asp-for="Descripcion"></label>
+        <input asp-for="Descripcion" maxlength="250" />
+        <span asp-validation-for="Descripcion" class="field-error"></span>
+    </div>
+</div>

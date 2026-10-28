@@ -1,0 +1,101 @@
+@model ReporteVentasViewModel
+@{
+    ViewData["Title"] = "Reporte de ventas";
+    var desde = Model.Desde.ToString("yyyy-MM-dd");
+    var hasta = Model.Hasta.ToString("yyyy-MM-dd");
+}
+
+<h1>Reportes</h1>
+
+<div class="actions no-imprimir" style="margin:0 0 16px">
+    <a class="btn btn-primary" asp-action="Ventas">Reporte de ventas</a>
+    <a class="btn" asp-action="Inventario">Reporte de inventario</a>
+</div>
+
+<div class="card no-imprimir">
+    <form asp-action="Ventas" method="get" class="filtros">
+        <div class="field">
+            <label for="desde">Desde</label>
+            <input type="date" id="desde" name="desde" value="@desde" />
+        </div>
+        <div class="field">
+            <label for="hasta">Hasta</label>
+            <input type="date" id="hasta" name="hasta" value="@hasta" />
+        </div>
+        <button type="submit" class="btn btn-primary">Generar reporte</button>
+        <a class="btn" asp-action="ExportarVentas" asp-route-desde="@desde" asp-route-hasta="@hasta">Exportar a Excel</a>
+        <button type="button" class="btn" onclick="window.print()">Imprimir / guardar como PDF</button>
+    </form>
+</div>
+
+<h2>Ventas del @Model.Desde.ToString("dd/MM/yyyy") al @Model.Hasta.ToString("dd/MM/yyyy")</h2>
+
+<div class="grid-3">
+    <div class="kpi">
+        <div class="valor">@Model.CantidadVentas</div>
+        <div class="etiqueta">Ventas registradas</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.Ingresos.ToString("C2")</div>
+        <div class="etiqueta">Ingresos (después de descuentos)</div>
+    </div>
+    <div class="kpi">
+        <div class="valor">@Model.Descuentos.ToString("C2")</div>
+        <div class="etiqueta">Descuentos aplicados</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Resumen por día</h2>
+    @if (!Model.PorDia.Any())
+    {
+        <p>No hay ventas en el período seleccionado.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead><tr><th>Día</th><th class="num">N° de ventas</th><th class="num">Ingresos</th></tr></thead>
+                <tbody>
+                @foreach (var d in Model.PorDia)
+                {
+                    <tr>
+                        <td>@d.Dia.ToString("dddd dd/MM/yyyy")</td>
+                        <td class="num">@d.Cantidad</td>
+                        <td class="num">@d.Monto.ToString("C2")</td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot>
+                    <tr><td>Total</td><td class="num">@Model.CantidadVentas</td><td class="num">@Model.Ingresos.ToString("C2")</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+</div>
+
+@if (Model.Ventas.Any())
+{
+    <div class="card">
+        <h2>Detalle de ventas</h2>
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr><th>N°</th><th>Fecha</th><th>Detalle</th><th>Pago</th><th class="num">Total</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var v in Model.Ventas)
+                {
+                    <tr>
+                        <td>#@v.Id</td>
+                        <td>@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@string.Join(", ", v.Detalles.Select(x => $"{x.Cantidad} x {x.Descripcion}"))</td>
+                        <td>@v.Pago?.Metodo</td>
+                        <td class="num">@v.Total.ToString("C2")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

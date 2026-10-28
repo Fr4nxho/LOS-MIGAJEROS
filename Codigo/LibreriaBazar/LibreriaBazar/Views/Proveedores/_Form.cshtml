@@ -1,0 +1,36 @@
+@model Proveedor
+
+<div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+<input type="hidden" asp-for="Id" />
+
+<div class="form-grid">
+    <div class="field">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" maxlength="120" />
+        <span asp-validation-for="Nombre" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Ruc">RUC</label>
+        <input asp-for="Ruc" maxlength="11" inputmode="numeric" />
+        <span asp-validation-for="Ruc" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Telefono"></label>
+        <input asp-for="Telefono" maxlength="20" />
+        <span asp-validation-for="Telefono" class="field-error"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Correo"></label>
+        <input asp-for="Correo" type="email" maxlength="100" />
+        <span asp-validation-for="Correo" class="field-error"></span>
+    </div>
+
+    <div class="field completo">
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" maxlength="200" />
+        <span asp-validation-for="Direccion" class="field-error"></span>
+    </div>
+</div>

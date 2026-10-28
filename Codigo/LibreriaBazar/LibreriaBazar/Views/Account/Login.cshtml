@@ -1,0 +1,30 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="login card">
+    <h1>Iniciar sesión</h1>
+    <p class="sub">Sistema de Gestión Librería Bazar Rosita</p>
+
+    <form asp-action="Login" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+        <input type="hidden" asp-for="ReturnUrl" />
+
+        <div class="field">
+            <label asp-for="NombreUsuario"></label>
+            <input asp-for="NombreUsuario" autocomplete="username" autofocus />
+            <span asp-validation-for="NombreUsuario" class="field-error"></span>
+        </div>
+
+        <div class="field" style="margin-top:14px">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" autocomplete="current-password" />
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn btn-primary" style="width:100%">Ingresar</button>
+        </div>
+    </form>
+</div>

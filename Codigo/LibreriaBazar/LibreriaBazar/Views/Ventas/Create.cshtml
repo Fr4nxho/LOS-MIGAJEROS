@@ -1,0 +1,264 @@
+@model VentaCreateViewModel
+@{
+    ViewData["Title"] = "Nueva venta";
+    var metodos = (IEnumerable<string>)ViewBag.Metodos;
+    var inicial = Model.Lineas.Select(l => new { tipo = l.Tipo, id = l.ItemId, cantidad = l.Cantidad }).ToList();
+}
+
+<h1>Nueva venta</h1>
+
+<form asp-action="Create" method="post" id="formVenta">
+    <div asp-validation-summary="All" class="alert alert-error"></div>
+
+    <div class="grid-2">
+        <section class="card">
+            <h2>1. Agregar productos o servicios</h2>
+
+            <div class="form-grid">
+                <div class="field completo">
+                    <label for="txtFiltro">Buscar (no distingue mayúsculas ni tildes)</label>
+                    <input type="text" id="txtFiltro" placeholder="Escriba para filtrar la lista" autocomplete="off" />
+                </div>
+
+                <div class="field completo">
+                    <label for="selItem">Producto o servicio</label>
+                    <select id="selItem">
+                        <option value="">— Seleccione —</option>
+                        <optgroup label="Productos">
+                            @foreach (var c in Model.Catalogo.Where(c => c.Tipo == "P"))
+                            {
+                                <option value="P-@c.Id" data-nombre="@c.Nombre" data-precio="@c.Precio.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" data-stock="@c.Stock">@c.Nombre · @c.Precio.ToString("C2") · stock: @c.Stock</option>
+                            }
+                        </optgroup>
+                        <optgroup label="Servicios">
+                            @foreach (var c in Model.Catalogo.Where(c => c.Tipo == "S"))
+                            {
+                                <option value="S-@c.Id" data-nombre="@c.Nombre" data-precio="@c.Precio.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" data-stock="">@c.Nombre · @c.Precio.ToString("C2")</option>
+                            }
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="txtCantidad">Cantidad</label>
+                    <input type="number" id="txtCantidad" value="1" min="1" step="1" />
+                </div>
+
+                <div class="field" style="justify-content:flex-end">
+                    <button type="button" id="btnAgregar" class="btn btn-primary">Agregar a la venta</button>
+                </div>
+            </div>
+
+            <h2 style="margin-top:22px">Detalle de la venta</h2>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th class="num">Precio</th>
+                            <th class="num">Cant.</th>
+                            <th class="num">Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyLineas"></tbody>
+                </table>
+            </div>
+            <p id="msgVacio" class="ayuda">Todavía no agregó ningún producto o servicio.</p>
+            <div id="lineasHidden"></div>
+        </section>
+
+        <section class="card">
+            <h2>2. Total y pago</h2>
+
+            <div class="field">
+                <label asp-for="Descuento">Descuento (S/)</label>
+                <input asp-for="Descuento" type="number" step="0.01" min="0" />
+                <span asp-validation-for="Descuento" class="field-error"></span>
+            </div>
+
+            <div class="field" style="margin-top:12px">
+                <label asp-for="MetodoPago">Método de pago</label>
+                <select asp-for="MetodoPago">
+                    @foreach (var m in metodos)
+                    {
+                        <option value="@m" selected="@(m == Model.MetodoPago)">@m</option>
+                    }
+                </select>
+            </div>
+
+            <div class="field" style="margin-top:12px" id="filaRecibido">
+                <label asp-for="MontoRecibido">Monto recibido (S/)</label>
+                <input asp-for="MontoRecibido" type="number" step="0.01" min="0" />
+                <span asp-validation-for="MontoRecibido" class="field-error"></span>
+            </div>
+
+            <div class="totales">
+                <span>Subtotal</span><strong id="lblSubtotal">S/ 0.00</strong>
+                <span>Descuento</span><strong id="lblDescuento">S/ 0.00</strong>
+                <span>Total a pagar</span><strong class="total-final" id="lblTotal">S/ 0.00</strong>
+                <span id="rotVuelto">Vuelto</span><strong id="lblVuelto">S/ 0.00</strong>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary" style="flex:1">Registrar venta</button>
+                <a class="btn" asp-action="Index">Cancelar</a>
+            </div>
+        </section>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+    (function () {
+        var sel = document.getElementById('selItem');
+        var filtro = document.getElementById('txtFiltro');
+        var cant = document.getElementById('txtCantidad');
+        var btnAgregar = document.getElementById('btnAgregar');
+        var tbody = document.getElementById('tbodyLineas');
+        var hidden = document.getElementById('lineasHidden');
+        var msgVacio = document.getElementById('msgVacio');
+        var descuento = document.getElementById('Descuento');
+        var metodo = document.getElementById('MetodoPago');
+        var recibido = document.getElementById('MontoRecibido');
+        var filaRecibido = document.getElementById('filaRecibido');
+        var form = document.getElementById('formVenta');
+        var lblSub = document.getElementById('lblSubtotal');
+        var lblDesc = document.getElementById('lblDescuento');
+        var lblTotal = document.getElementById('lblTotal');
+        var lblVuelto = document.getElementById('lblVuelto');
+        var rotVuelto = document.getElementById('rotVuelto');
+
+        // Métodos de pago que piden monto recibido; lo define el servidor (estrategias de pago)
+        var metodosConMonto = @Html.Raw(Json.Serialize((IEnumerable<string>)ViewBag.MetodosConMonto));
+        var lineas = [];
+
+        function fmt(n) { return 'S/ ' + n.toFixed(2); }
+        function norm(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+        function num(el) { var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+
+        // Guarda el texto original de cada opción para poder filtrar
+        var opciones = Array.prototype.slice.call(sel.querySelectorAll('option[value]:not([value=""])'));
+        opciones.forEach(function (o) { o.dataset.texto = norm(o.textContent); });
+
+        filtro.addEventListener('input', function () {
+            var t = norm(filtro.value.trim());
+            opciones.forEach(function (o) {
+                var visible = t === '' || o.dataset.texto.indexOf(t) !== -1;
+                o.hidden = !visible;
+                o.disabled = !visible;
+            });
+            sel.value = '';
+        });
+
+        function agregar(tipo, id, cantidad) {
+            var opt = sel.querySelector('option[value="' + tipo + '-' + id + '"]');
+            if (!opt) { return; }
+            var precio = parseFloat(opt.dataset.precio);
+            var stock = opt.dataset.stock === '' ? null : parseInt(opt.dataset.stock, 10);
+            var existente = lineas.filter(function (l) { return l.tipo === tipo && l.id === id; })[0];
+            var nueva = (existente ? existente.cantidad : 0) + cantidad;
+
+            if (stock !== null && nueva > stock) {
+                alert('Stock insuficiente. Disponible: ' + stock);
+                return;
+            }
+            if (existente) {
+                existente.cantidad = nueva;
+            } else {
+                lineas.push({ tipo: tipo, id: id, nombre: opt.dataset.nombre, precio: precio, cantidad: cantidad });
+            }
+            render();
+        }
+
+        function render() {
+            tbody.innerHTML = '';
+            hidden.innerHTML = '';
+            var subtotal = 0;
+
+            lineas.forEach(function (l, i) {
+                var st = l.precio * l.cantidad;
+                subtotal += st;
+
+                var tr = document.createElement('tr');
+                function celda(texto, clase) {
+                    var td = document.createElement('td');
+                    td.textContent = texto;
+                    if (clase) { td.className = clase; }
+                    tr.appendChild(td);
+                    return td;
+                }
+                celda(l.nombre);
+                celda(l.tipo === 'P' ? 'Producto' : 'Servicio');
+                celda(fmt(l.precio), 'num');
+                celda(String(l.cantidad), 'num');
+                celda(fmt(st), 'num');
+
+                var tdBtn = document.createElement('td');
+                tdBtn.className = 'num';
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-sm btn-danger';
+                btn.textContent = 'Quitar';
+                btn.addEventListener('click', function () { lineas.splice(i, 1); render(); });
+                tdBtn.appendChild(btn);
+                tr.appendChild(tdBtn);
+                tbody.appendChild(tr);
+
+                hidden.insertAdjacentHTML('beforeend',
+                    '<input type="hidden" name="Lineas[' + i + '].Tipo" value="' + l.tipo + '" />' +
+                    '<input type="hidden" name="Lineas[' + i + '].ItemId" value="' + l.id + '" />' +
+                    '<input type="hidden" name="Lineas[' + i + '].Cantidad" value="' + l.cantidad + '" />');
+            });
+
+            msgVacio.style.display = lineas.length ? 'none' : '';
+            totales(subtotal);
+        }
+
+        var ultimoSubtotal = 0;
+        function totales(subtotal) {
+            if (typeof subtotal === 'number') { ultimoSubtotal = subtotal; }
+            var d = Math.min(num(descuento), ultimoSubtotal);
+            var total = ultimoSubtotal - d;
+            lblSub.textContent = fmt(ultimoSubtotal);
+            lblDesc.textContent = fmt(d);
+            lblTotal.textContent = fmt(total);
+
+            var efectivo = metodosConMonto.indexOf(metodo.value) !== -1;
+            filaRecibido.style.display = efectivo ? '' : 'none';
+            rotVuelto.style.display = efectivo ? '' : 'none';
+            lblVuelto.style.display = efectivo ? '' : 'none';
+            lblVuelto.textContent = fmt(Math.max(0, num(recibido) - total));
+        }
+
+        btnAgregar.addEventListener('click', function () {
+            if (!sel.value) { alert('Seleccione un producto o servicio.'); return; }
+            var c = parseInt(cant.value, 10);
+            if (isNaN(c) || c < 1) { alert('La cantidad debe ser un número entero mayor que 0.'); return; }
+            var partes = sel.value.split('-');
+            agregar(partes[0], parseInt(partes[1], 10), c);
+            cant.value = 1;
+            sel.value = '';
+            filtro.value = '';
+            filtro.dispatchEvent(new Event('input'));
+            filtro.focus();
+        });
+
+        [descuento, recibido].forEach(function (el) { el.addEventListener('input', function () { totales(); }); });
+        metodo.addEventListener('change', function () { totales(); });
+
+        form.addEventListener('submit', function (e) {
+            if (lineas.length === 0) {
+                e.preventDefault();
+                alert('Agregue al menos un producto o servicio a la venta.');
+            }
+        });
+
+        // Recupera las líneas si el servidor devolvió el formulario con errores
+        var inicial = @Html.Raw(Json.Serialize(inicial));
+        inicial.forEach(function (l) { agregar(l.tipo, l.id, l.cantidad); });
+        render();
+    })();
+    </script>
+}

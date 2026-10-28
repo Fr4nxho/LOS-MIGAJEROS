@@ -1,0 +1,12 @@
+@if (TempData["Ok"] is string mensajeOk)
+{
+    <div class="alert alert-ok" role="status">@mensajeOk</div>
+}
+@if (TempData["Alerta"] is string mensajeAlerta)
+{
+    <div class="alert alert-alerta" role="alert">@mensajeAlerta</div>
+}
+@if (TempData["Error"] is string mensajeError)
+{
+    <div class="alert alert-error" role="alert">@mensajeError</div>
+}

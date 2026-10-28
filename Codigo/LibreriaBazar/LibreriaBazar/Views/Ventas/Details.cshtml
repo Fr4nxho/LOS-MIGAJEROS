@@ -1,0 +1,57 @@
+@model Venta
+@{
+    ViewData["Title"] = $"Venta #{Model.Id}";
+}
+
+<h1>Venta #@Model.Id</h1>
+
+<div class="card">
+    <p>
+        <strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm") ·
+        <strong>Atendió:</strong> @Model.Usuario?.NombreCompleto
+    </p>
+
+    <div class="tabla-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th class="num">Precio</th>
+                    <th class="num">Cant.</th>
+                    <th class="num">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var d in Model.Detalles)
+            {
+                <tr>
+                    <td>@d.Descripcion</td>
+                    <td>@(d.ProductoId.HasValue ? "Producto" : "Servicio")</td>
+                    <td class="num">@d.PrecioUnitario.ToString("C2")</td>
+                    <td class="num">@d.Cantidad</td>
+                    <td class="num">@d.Subtotal.ToString("C2")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="totales">
+        <span>Subtotal</span><strong>@Model.Subtotal.ToString("C2")</strong>
+        <span>Descuento</span><strong>@Model.Descuento.ToString("C2")</strong>
+        <span>Total</span><strong class="total-final">@Model.Total.ToString("C2")</strong>
+        @if (Model.Pago != null)
+        {
+            <span>Método de pago</span><strong>@Model.Pago.Metodo</strong>
+            <span>Monto recibido</span><strong>@Model.Pago.MontoRecibido.ToString("C2")</strong>
+            <span>Vuelto</span><strong>@Model.Pago.Vuelto.ToString("C2")</strong>
+        }
+    </div>
+
+    <div class="actions no-imprimir">
+        <a class="btn btn-primary" asp-action="Create">Nueva venta</a>
+        <a class="btn" asp-action="Index">Volver al historial</a>
+        <button type="button" class="btn" onclick="window.print()">Imprimir comprobante</button>
+    </div>
+</div>

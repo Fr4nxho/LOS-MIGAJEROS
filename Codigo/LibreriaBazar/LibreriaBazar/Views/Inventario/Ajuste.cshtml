@@ -1,0 +1,38 @@
+@model AjusteViewModel
+@{
+    ViewData["Title"] = "Ajuste de inventario";
+}
+
+<h1>Ajuste de inventario</h1>
+
+<form asp-action="Ajuste" method="post" class="card">
+    <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+    <p class="ayuda">Use esta opción cuando el conteo físico no coincide con el stock del sistema (mermas, pérdidas, errores de registro).</p>
+
+    <div class="form-grid">
+        <div class="field">
+            <label asp-for="ProductoId"></label>
+            <select asp-for="ProductoId" asp-items="(SelectList)ViewBag.Productos">
+                <option value="0">— Seleccione —</option>
+            </select>
+            <span asp-validation-for="ProductoId" class="field-error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="NuevoStock"></label>
+            <input asp-for="NuevoStock" type="number" step="1" min="0" />
+            <span asp-validation-for="NuevoStock" class="field-error"></span>
+        </div>
+
+        <div class="field completo">
+            <label asp-for="Motivo"></label>
+            <input asp-for="Motivo" maxlength="200" />
+            <span asp-validation-for="Motivo" class="field-error"></span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button type="submit" class="btn btn-primary">Registrar ajuste</button>
+        <a class="btn" asp-action="Index">Cancelar</a>
+    </div>
+</form>

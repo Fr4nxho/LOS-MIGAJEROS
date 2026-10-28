@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CUS_Consultar Resumen Didario" version="4">
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CUS_Consultar Resumen Diario" version="4">
   <OBJECT>
-    <ID name="CUS_Consultar Resumen Didario" mc="Standard.UseCase" uid="6fa89b5e-1919-428f-8eef-247fc0ce2fd6"/>
+    <ID name="CUS_Consultar Resumen Diario" mc="Standard.UseCase" uid="6fa89b5e-1919-428f-8eef-247fc0ce2fd6"/>
     <PID name="1Atender Ventas y Servicios" mc="Standard.Package" uid="4b57193a-b3fe-4d98-a2af-610b208470bf"/>
     <ATTRIBUTES>
       <ATT name="IsElementary">false</ATT>
@@ -9,7 +9,7 @@
       <ATT name="IsLeaf">false</ATT>
       <ATT name="IsRoot">false</ATT>
       <ATT name="Visibility">Public</ATT>
-      <ATT name="Name"><![CDATA[CUS_Consultar Resumen Didario]]></ATT>
+      <ATT name="Name"><![CDATA[CUS_Consultar Resumen Diario]]></ATT>
       <ATT name="status">1970354901745664</ATT>
     </ATTRIBUTES>
     <DEPENDENCIES>
@@ -75,6 +75,9 @@
             </COMP>
           </DEPENDENCIES>
         </OBJECT>
+      </COMP>
+      <COMP relation="OwnedBehavior">
+        <COMPID name="Interaction" mc="Standard.Interaction" uid="f25f757c-534e-4d8a-b603-3ca69755075b"/>
       </COMP>
       <COMP relation="Descriptor">
         <OBJECT>

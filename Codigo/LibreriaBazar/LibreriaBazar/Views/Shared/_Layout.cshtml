@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Librería Bazar Rosita</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <a class="marca" asp-controller="Home" asp-action="Index">Librería Bazar Rosita</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <nav>
+                <a asp-controller="Home" asp-action="Index">Inicio</a>
+                <a asp-controller="Ventas" asp-action="Create">Nueva venta</a>
+                <a asp-controller="Ventas" asp-action="Index">Ventas</a>
+                <a asp-controller="Productos" asp-action="Index">Productos</a>
+                <a asp-controller="Servicios" asp-action="Index">Servicios</a>
+                <a asp-controller="Inventario" asp-action="Index">Inventario</a>
+                <a asp-controller="Proveedores" asp-action="Index">Proveedores</a>
+                <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+                <a asp-controller="Reportes" asp-action="Ventas">Reportes</a>
+                @if (User.IsInRole("Propietario"))
+                {
+                    <a asp-controller="Admin" asp-action="Respaldo">Respaldo</a>
+                }
+            </nav>
+            <div class="usuario">
+                <span>@(User.FindFirst("NombreCompleto")?.Value) (@(User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value))</span>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                    <button type="submit">Cerrar sesión</button>
+                </form>
+            </div>
+        }
+    </header>
+
+    <main>
+        <partial name="_Mensajes" />
+        @RenderBody()
+    </main>
+
+    <footer>
+        Sistema de Gestión Librería Bazar Rosita · ODS 8: Trabajo decente y crecimiento económico · Diseño y Arquitectura de Software (UPN)
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

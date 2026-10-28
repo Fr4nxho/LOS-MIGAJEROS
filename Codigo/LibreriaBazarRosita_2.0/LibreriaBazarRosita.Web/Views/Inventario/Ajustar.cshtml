@@ -1,0 +1,129 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.AjustarInventarioViewModel
+
+@{
+    ViewData["Title"] = "Ajustar inventario";
+}
+
+<div class="container mt-4">
+
+    <h2>Realizar ajuste de inventario</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+    <div class="card">
+
+        <div class="card-header bg-dark text-white">
+            Datos del producto
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <strong>Producto:</strong>
+                    @Model.NombreProducto
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Stock actual:</strong>
+                    @Model.StockActual
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Stock mínimo:</strong>
+                    @Model.StockMinimo
+                </div>
+
+            </div>
+
+            <hr />
+
+            <form asp-controller="Inventario"
+                  asp-action="Ajustar"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="IdProducto" type="hidden" />
+
+                <input asp-for="StockActual" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="CantidadFisica"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="CantidadFisica"
+                           type="number"
+                           min="0"
+                           step="1"
+                           class="form-control" />
+
+                    <span asp-validation-for="CantidadFisica"
+                          class="text-danger">
+                    </span>
+
+                    <div class="form-text">
+                        Ingrese las unidades encontradas
+                        durante el conteo físico.
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Motivo"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Motivo"
+                              class="form-control"
+                              rows="3"
+                              maxlength="200"
+                              placeholder="Ejemplo: Diferencia encontrada durante conteo físico">
+                    </textarea>
+
+                    <span asp-validation-for="Motivo"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        Confirmar ajuste
+
+                    </button>
+
+                    <a asp-controller="Inventario"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

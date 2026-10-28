@@ -17,7 +17,11 @@
         <COMPID name="Modelo de Negocio" mc="Standard.Package" uid="36cdf9bb-9008-4de1-8866-6f4329f7aa84"/>
         <COMPID name="REQUISITOS" mc="Standard.Package" uid="025aee46-12cc-4c34-b63c-3410c17fc281"/>
         <COMPID name="Modelo Conceptual" mc="Standard.Package" uid="a29f8a9c-0229-46bb-a966-48ee808ca8bb"/>
-        <COMPID name="Diagrama de Secuencia" mc="Standard.Package" uid="f254c21e-e0a5-42e8-a8c8-834acb494f22"/>
+        <COMPID name="Modelo De Datos" mc="Standard.Package" uid="6bf47f11-af1f-43e1-8a2d-6fde827210ad"/>
+        <COMPID name="decimal" mc="Standard.DataType" uid="17e9ccd3-9144-4b3f-8303-d20ac1472d2e"/>
+        <COMPID name="int" mc="Standard.DataType" uid="cb3d1f7a-48ba-4d93-af4e-12cce3716bba"/>
+        <COMPID name="datetime" mc="Standard.DataType" uid="c8833f01-966e-4c09-a943-2164e60b19ff"/>
+        <COMPID name="Modelo de Diseño" mc="Standard.Package" uid="e22b3534-a18a-4e0f-812c-67e2875a4095"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

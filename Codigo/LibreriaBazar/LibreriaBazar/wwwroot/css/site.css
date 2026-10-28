@@ -1,0 +1,150 @@
+/* Sistema de Gestión - Librería Bazar Rosita
+   Estilos propios (sin dependencias externas): el sistema funciona sin Internet (RNF08).
+   Texto oscuro sobre fondo claro para buena legibilidad (RNF14). */
+
+:root {
+  --color-fondo: #f4f6f9;
+  --color-superficie: #ffffff;
+  --color-texto: #1f2933;
+  --color-suave: #5b6770;
+  --color-borde: #d5dbe1;
+  --color-primario: #1d4e89;
+  --color-primario-oscuro: #143a68;
+  --color-ok: #1b6e3c;
+  --color-ok-fondo: #e3f4ea;
+  --color-alerta: #8a5a00;
+  --color-alerta-fondo: #fff3d6;
+  --color-error: #a12622;
+  --color-error-fondo: #fde8e7;
+  --radio: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+a { color: var(--color-primario); }
+
+/* ---------- Barra superior ---------- */
+.topbar {
+  background: var(--color-primario);
+  color: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+.topbar .marca { font-weight: 700; font-size: 18px; padding: 14px 0; color: #fff; text-decoration: none; }
+.topbar nav { display: flex; flex-wrap: wrap; gap: 2px; flex: 1; }
+.topbar nav a { color: #fff; text-decoration: none; padding: 14px 12px; border-radius: 4px 4px 0 0; font-size: 15px; }
+.topbar nav a:hover, .topbar nav a:focus { background: var(--color-primario-oscuro); }
+.topbar .usuario { font-size: 14px; display: flex; align-items: center; gap: 12px; }
+.topbar .usuario button { background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.topbar .usuario button:hover { background: var(--color-primario-oscuro); }
+
+main { max-width: 1180px; margin: 24px auto; padding: 0 20px 40px; }
+h1 { font-size: 26px; margin: 0 0 18px; }
+h2 { font-size: 19px; margin: 0 0 12px; }
+footer { text-align: center; color: var(--color-suave); font-size: 13px; padding: 18px; }
+
+/* ---------- Tarjetas y rejillas ---------- */
+.card { background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio); padding: 20px; margin-bottom: 20px; }
+.grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 20px; }
+.form-grid .completo { grid-column: 1 / -1; }
+@media (max-width: 820px) {
+  .grid-2, .grid-3, .grid-4, .form-grid { grid-template-columns: 1fr; }
+}
+
+.kpi { background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio); padding: 18px; }
+.kpi .valor { font-size: 30px; font-weight: 700; color: var(--color-primario); }
+.kpi .etiqueta { color: var(--color-suave); font-size: 14px; }
+
+/* ---------- Formularios ---------- */
+.field { display: flex; flex-direction: column; gap: 4px; }
+label { font-weight: 600; font-size: 14px; }
+input[type=text], input[type=password], input[type=number], input[type=date], input[type=email], select, textarea {
+  width: 100%;
+  padding: 9px 10px;
+  font-size: 16px;
+  border: 1px solid #9aa5b1;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-texto);
+}
+input:focus, select:focus, textarea:focus { outline: 3px solid #9cc2ee; border-color: var(--color-primario); }
+input[type=checkbox] { width: 18px; height: 18px; vertical-align: middle; }
+.field-error { color: var(--color-error); font-size: 13px; }
+.ayuda { color: var(--color-suave); font-size: 13px; }
+.filtros { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+.filtros .field { min-width: 180px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+.inline { display: inline; }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-block;
+  padding: 9px 16px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #9aa5b1;
+  background: #fff;
+  color: var(--color-texto);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover { background: #eef2f6; }
+.btn-primary { background: var(--color-primario); border-color: var(--color-primario); color: #fff; }
+.btn-primary:hover { background: var(--color-primario-oscuro); }
+.btn-danger { background: #fff; border-color: var(--color-error); color: var(--color-error); }
+.btn-danger:hover { background: var(--color-error-fondo); }
+.btn-sm { padding: 5px 10px; font-size: 13px; }
+
+/* ---------- Tablas ---------- */
+.tabla-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--color-borde); vertical-align: middle; }
+th { background: #eaeff5; font-size: 14px; }
+tr.inactivo td { color: var(--color-suave); background: #f7f7f7; }
+td.num, th.num { text-align: right; white-space: nowrap; }
+tfoot td { font-weight: 700; background: #f4f6f9; }
+
+/* ---------- Avisos y etiquetas ---------- */
+.alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; border: 1px solid; }
+.alert-ok { background: var(--color-ok-fondo); color: var(--color-ok); border-color: #9fd3b4; }
+.alert-alerta { background: var(--color-alerta-fondo); color: var(--color-alerta); border-color: #e8c776; }
+.alert-error { background: var(--color-error-fondo); color: var(--color-error); border-color: #e6a7a4; }
+.alert-error:empty { display: none; }
+.alert ul { margin: 0; padding-left: 20px; }
+
+.badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.badge-ok { background: var(--color-ok-fondo); color: var(--color-ok); }
+.badge-alerta { background: var(--color-alerta-fondo); color: var(--color-alerta); }
+.badge-error { background: var(--color-error-fondo); color: var(--color-error); }
+.badge-gris { background: #e6e9ed; color: #3e4953; }
+
+/* ---------- Login ---------- */
+.login { max-width: 400px; margin: 60px auto; }
+.login h1 { text-align: center; }
+.login .sub { text-align: center; color: var(--color-suave); margin-top: -10px; margin-bottom: 18px; }
+
+/* ---------- Totales de venta ---------- */
+.totales { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; margin: 14px 0; font-size: 17px; }
+.totales .total-final { font-size: 24px; font-weight: 700; color: var(--color-primario); }
+
+@media print {
+  .topbar, footer, .no-imprimir, .actions { display: none !important; }
+  body { background: #fff; }
+  .card, .kpi { border: none; padding: 0; }
+  main { margin: 0; max-width: none; }
+}

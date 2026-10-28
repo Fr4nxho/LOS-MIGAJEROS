@@ -30,6 +30,9 @@
           </DEPENDENCIES>
         </OBJECT>
       </COMP>
+      <COMP relation="OwnedBehavior">
+        <COMPID name="Interaction" mc="Standard.Interaction" uid="a098cee3-fb6e-4ed9-90e0-ae486dc2d5a7"/>
+      </COMP>
       <COMP relation="Descriptor">
         <OBJECT>
           <ID name="" mc="Infrastructure.Note" uid="783c6064-2c6a-4a64-839b-ec93f5825d56"/>

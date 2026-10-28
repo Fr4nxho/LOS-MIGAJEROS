@@ -1,0 +1,65 @@
+@model List<Venta>
+@{
+    ViewData["Title"] = "Historial de ventas";
+}
+
+<h1>Historial de ventas</h1>
+
+<div class="card">
+    <form asp-action="Index" method="get" class="filtros">
+        <div class="field">
+            <label for="desde">Desde</label>
+            <input type="date" id="desde" name="desde" value="@ViewBag.Desde" />
+        </div>
+        <div class="field">
+            <label for="hasta">Hasta</label>
+            <input type="date" id="hasta" name="hasta" value="@ViewBag.Hasta" />
+        </div>
+        <button type="submit" class="btn btn-primary">Consultar</button>
+        <a class="btn" asp-action="Create">Nueva venta</a>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <p>No hay ventas registradas en el período seleccionado.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Fecha y hora</th>
+                        <th>Atendió</th>
+                        <th>Pago</th>
+                        <th class="num">Descuento</th>
+                        <th class="num">Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td>#@v.Id</td>
+                        <td>@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@v.Usuario?.NombreCompleto</td>
+                        <td>@v.Pago?.Metodo</td>
+                        <td class="num">@v.Descuento.ToString("C2")</td>
+                        <td class="num">@v.Total.ToString("C2")</td>
+                        <td class="num"><a class="btn btn-sm" asp-action="Details" asp-route-id="@v.Id">Ver detalle</a></td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">@Model.Count venta(s) en el período</td>
+                        <td class="num">@Model.Sum(v => v.Total).ToString("C2")</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+</div>

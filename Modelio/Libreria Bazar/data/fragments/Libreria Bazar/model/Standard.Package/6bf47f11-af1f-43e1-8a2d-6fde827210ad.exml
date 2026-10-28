@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Modelo De Datos" version="4">
+  <OBJECT>
+    <ID name="Modelo De Datos" mc="Standard.Package" uid="6bf47f11-af1f-43e1-8a2d-6fde827210ad"/>
+    <PID name="libreria bazar" mc="Standard.Package" uid="8eef757a-432e-48c1-92dd-d493a9b7df3f"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Modelo De Datos]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Usuario" mc="Standard.Class" uid="6638b1e0-180f-4837-a80a-b5f05e86af90"/>
+        <COMPID name="Categoria" mc="Standard.Class" uid="29c12ff0-e050-4614-a38d-276e1a7f3bb6"/>
+        <COMPID name="ItemCatalogo" mc="Standard.Class" uid="f716113a-6544-4462-9e5d-515ba38004a3"/>
+        <COMPID name="Producto" mc="Standard.Class" uid="98658bfe-cf0a-46ab-9c92-a400aae3d2aa"/>
+        <COMPID name="Servicio" mc="Standard.Class" uid="e0996d8b-28c4-4671-aaf2-0228aa3c644c"/>
+        <COMPID name="Venta" mc="Standard.Class" uid="7e5c3d8c-61e5-4aa8-a7af-f2380ae33d16"/>
+        <COMPID name="DetalleVenta" mc="Standard.Class" uid="76d9d822-051e-4118-89e4-bf18c0ea92c3"/>
+        <COMPID name="PagoVenta" mc="Standard.Class" uid="f7dd69d2-cd62-4622-8e41-c3f4b0deb61c"/>
+        <COMPID name="Proveedor" mc="Standard.Class" uid="ad2d51de-c2bc-42e7-891a-6f15f3f097fc"/>
+        <COMPID name="PedidoProveedor" mc="Standard.Class" uid="630a4f50-abea-4878-a4c0-1d131250fe06"/>
+        <COMPID name="DetallePedido" mc="Standard.Class" uid="dd9ce8bb-28d4-42b9-8053-53f677716085"/>
+        <COMPID name="PagoProveedor" mc="Standard.Class" uid="fa434d07-84da-4cca-bbb5-7a7941dae3f6"/>
+        <COMPID name="MovimientoInventario" mc="Standard.Class" uid="8410d4a3-e3c1-4858-b689-75c038d81fa4"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="ML_ModeloLogicoDatos" mc="Standard.ClassDiagram" uid="91148522-0615-49f0-a138-94bcd23c9852"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

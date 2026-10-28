@@ -1,0 +1,57 @@
+@model List<MovimientoInventario>
+@{
+    ViewData["Title"] = "Movimientos de inventario";
+}
+
+<h1>Historial de movimientos de inventario</h1>
+
+<div class="card">
+    <form asp-action="Movimientos" method="get" class="filtros">
+        <div class="field">
+            <label for="productoId">Producto</label>
+            <select id="productoId" name="productoId" asp-items="(SelectList)ViewBag.Productos">
+                <option value="">Todos los productos</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a class="btn" asp-action="Index">Volver al inventario</a>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <p>No hay movimientos registrados.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th>Tipo</th>
+                        <th class="num">Cantidad</th>
+                        <th class="num">Stock resultante</th>
+                        <th>Motivo</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td>@m.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@m.Producto?.Nombre</td>
+                        <td>@m.Tipo</td>
+                        <td class="num">@(m.Cantidad > 0 ? "+" : "")@m.Cantidad</td>
+                        <td class="num">@m.StockResultante</td>
+                        <td>@m.Motivo</td>
+                        <td>@m.Usuario?.NombreUsuario</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <p class="ayuda">Se muestran los 300 movimientos más recientes.</p>
+    }
+</div>

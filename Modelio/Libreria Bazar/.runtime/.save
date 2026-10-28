@@ -1,3 +1,2 @@
-#Wed Oct 14 20:11:06 COT 2026
-org.modelio.app.diagram.editor.OpenedDiagrams0='DS_CalcularTotal' {d76843ee-3068-4287-bc96-503f7ea895a8} Standard.SequenceDiagram
-org.modelio.app.diagram.editor.OpenedDiagrams1='DC_ModeloConceptual' {f0bf71d5-4d01-4390-b67e-d49c889d9c53} Standard.ClassDiagram
+#Sat Oct 24 20:47:36 COT 2026
+org.modelio.app.diagram.editor.OpenedDiagrams0='DE_EstadosStockProducto' {b3aab8b5-e424-4609-b92d-501546b346e8} Standard.StateMachineDiagram

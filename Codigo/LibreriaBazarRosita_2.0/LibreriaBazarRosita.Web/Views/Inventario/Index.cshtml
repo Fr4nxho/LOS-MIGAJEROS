@@ -1,0 +1,279 @@
+﻿@model IEnumerable<LibreriaBazarRosita.Web.Models.Entities.ItemCatalogo>
+
+@{
+    ViewData["Title"] = "Consultar inventario";
+
+    var busqueda = ViewBag.Busqueda as string ?? "";
+    var nivelSeleccionado = ViewBag.NivelStock as string ?? "";
+
+    int totalProductos = Model.Count();
+
+    int agotados = Model.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual == 0);
+
+    int stockBajo = Model.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual > 0 &&
+        i.Producto.StockActual <= i.Producto.StockMinimo);
+
+    int disponibles = Model.Count(i =>
+        i.Producto != null &&
+        i.Producto.StockActual > i.Producto.StockMinimo);
+}
+
+<div class="container mt-4">
+
+    <h2>Consulta de inventario</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+
+    <div class="mb-3">
+
+        <a asp-controller="Inventario"
+           asp-action="Reporte"
+           class="btn btn-outline-primary">
+
+            Generar reporte de inventario
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Exito"]
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info" role="alert">
+            @TempData["Info"]
+        </div>
+    }
+
+
+    <!-- RESUMEN DE INVENTARIO -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card border-primary h-100">
+                <div class="card-body">
+                    <h6>Total de productos</h6>
+                    <h3>@totalProductos</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-success h-100">
+                <div class="card-body">
+                    <h6>Disponibles</h6>
+                    <h3 class="text-success">
+                        @disponibles
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-warning h-100">
+                <div class="card-body">
+                    <h6>Stock bajo</h6>
+                    <h3 class="text-warning">
+                        @stockBajo
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-danger h-100">
+                <div class="card-body">
+                    <h6>Agotados</h6>
+                    <h3 class="text-danger">
+                        @agotados
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FILTROS -->
+
+    <form asp-controller="Inventario"
+          asp-action="Index"
+          method="get"
+          class="row g-3 mb-4">
+
+        <div class="col-md-5">
+
+            <label for="busqueda" class="form-label">
+                Buscar producto
+            </label>
+
+            <input type="search"
+                   id="busqueda"
+                   name="busqueda"
+                   value="@busqueda"
+                   class="form-control"
+                   placeholder="Ejemplo: Cuaderno" />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <label for="nivelStock" class="form-label">
+                Nivel de stock
+            </label>
+
+            <select id="nivelStock"
+                    name="nivelStock"
+                    class="form-select">
+
+                <option value="">Todos</option>
+
+                <option value="DISPONIBLE"
+                        selected="@(nivelSeleccionado == "DISPONIBLE")">
+                    Disponible
+                </option>
+
+                <option value="BAJO"
+                        selected="@(nivelSeleccionado == "BAJO")">
+                    Stock bajo
+                </option>
+
+                <option value="AGOTADO"
+                        selected="@(nivelSeleccionado == "AGOTADO")">
+                    Agotado
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Buscar
+            </button>
+
+            <a asp-controller="Inventario"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Limpiar
+            </a>
+
+        </div>
+
+    </form>
+
+    <!-- TABLA DE PRODUCTOS -->
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Stock actual</th>
+                    <th>Stock mínimo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        var producto = item.Producto!;
+
+                        <tr>
+
+                            <td>@item.IdItem</td>
+
+                            <td>@item.Nombre</td>
+
+                            <td>@producto.StockActual</td>
+
+                            <td>@producto.StockMinimo</td>
+
+                            <td>
+
+                                @if (producto.StockActual == 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        Agotado
+                                    </span>
+                                }
+                                else if (
+                                producto.StockActual <=
+                                producto.StockMinimo)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Stock bajo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        Disponible
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+                                <a asp-controller="Inventario"
+                                   asp-action="Ajustar"
+                                   asp-route-id="@item.IdItem"
+                                   class="btn btn-warning btn-sm">
+
+                                    Ajustar stock
+
+                                </a>
+                            </td>
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="6"
+                            class="text-center text-muted py-4">
+
+                            No se encontraron productos
+                            con los criterios seleccionados.
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

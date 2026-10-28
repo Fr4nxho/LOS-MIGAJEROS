@@ -1,0 +1,54 @@
+@model List<PedidoProveedor>
+@{
+    ViewData["Title"] = "Pedidos a proveedores";
+}
+
+<h1>Pedidos a proveedores</h1>
+
+<div class="card">
+    <div class="actions" style="margin:0 0 14px">
+        <a class="btn btn-primary" asp-action="Create">Nuevo pedido</a>
+        <a class="btn" asp-controller="Proveedores" asp-action="Index">Proveedores</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <p>Todavía no se registraron pedidos.</p>
+    }
+    else
+    {
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Estado</th>
+                        <th class="num">Total</th>
+                        <th class="num">Saldo por pagar</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>#@p.Id</td>
+                        <td>@p.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@p.Proveedor?.Nombre</td>
+                        <td>
+                            @if (p.Estado == EstadoPedido.Pendiente) { <span class="badge badge-alerta">Pendiente</span> }
+                            else if (p.Estado == EstadoPedido.Recibido) { <span class="badge badge-ok">Recibido</span> }
+                            else { <span class="badge badge-gris">Cancelado</span> }
+                        </td>
+                        <td class="num">@p.Total.ToString("C2")</td>
+                        <td class="num">@(p.Estado == EstadoPedido.Cancelado ? "—" : p.Saldo.ToString("C2"))</td>
+                        <td class="num"><a class="btn btn-sm" asp-action="Details" asp-route-id="@p.Id">Ver</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

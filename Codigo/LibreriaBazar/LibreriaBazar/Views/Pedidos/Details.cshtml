@@ -1,0 +1,122 @@
+@model PedidoProveedor
+@{
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+    var metodos = (string[])ViewBag.Metodos;
+}
+
+<h1>Pedido #@Model.Id</h1>
+
+<div class="grid-2">
+    <section class="card">
+        <p>
+            <strong>Proveedor:</strong> @Model.Proveedor?.Nombre<br />
+            <strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")<br />
+            <strong>Estado:</strong>
+            @if (Model.Estado == EstadoPedido.Pendiente) { <span class="badge badge-alerta">Pendiente</span> }
+            else if (Model.Estado == EstadoPedido.Recibido) { <span class="badge badge-ok">Recibido</span> }
+            else { <span class="badge badge-gris">Cancelado</span> }
+            @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+            {
+                <br /><strong>Observación:</strong> @Model.Observacion
+            }
+        </p>
+
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr><th>Producto</th><th class="num">Cant.</th><th class="num">Costo unit.</th><th class="num">Subtotal</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var d in Model.Detalles)
+                {
+                    <tr>
+                        <td>@d.Producto?.Nombre</td>
+                        <td class="num">@d.Cantidad</td>
+                        <td class="num">@d.CostoUnitario.ToString("C2")</td>
+                        <td class="num">@d.Subtotal.ToString("C2")</td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">Total del pedido</td><td class="num">@Model.Total.ToString("C2")</td></tr>
+                </tfoot>
+            </table>
+        </div>
+
+        @if (Model.Estado == EstadoPedido.Pendiente)
+        {
+            <div class="actions no-imprimir">
+                <form asp-action="Recibir" asp-route-id="@Model.Id" method="post" class="inline">
+                    <button type="submit" class="btn btn-primary">Registrar recepción de mercadería</button>
+                </form>
+                <form asp-action="Cancelar" asp-route-id="@Model.Id" method="post" class="inline">
+                    <button type="submit" class="btn btn-danger">Cancelar pedido</button>
+                </form>
+            </div>
+            <p class="ayuda">Al registrar la recepción, el stock de cada producto se actualiza automáticamente.</p>
+        }
+        <div class="actions no-imprimir">
+            <a class="btn" asp-action="Index">Volver a pedidos</a>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Pagos al proveedor</h2>
+        <div class="totales">
+            <span>Total del pedido</span><strong>@Model.Total.ToString("C2")</strong>
+            <span>Pagado</span><strong>@Model.TotalPagado.ToString("C2")</strong>
+            <span>Saldo pendiente</span><strong class="total-final">@Model.Saldo.ToString("C2")</strong>
+        </div>
+
+        @if (Model.Pagos.Any())
+        {
+            <div class="tabla-wrap">
+                <table>
+                    <thead><tr><th>Fecha</th><th>Método</th><th class="num">Monto</th></tr></thead>
+                    <tbody>
+                    @foreach (var pago in Model.Pagos.OrderBy(x => x.Fecha))
+                    {
+                        <tr>
+                            <td>@pago.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@pago.Metodo</td>
+                            <td class="num">@pago.Monto.ToString("C2")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="ayuda">Aún no se registraron pagos.</p>
+        }
+
+        @if (Model.Estado != EstadoPedido.Cancelado && Model.Saldo > 0)
+        {
+            <h2 style="margin-top:20px">Registrar un pago</h2>
+            <form asp-action="RegistrarPago" method="post">
+                <input type="hidden" name="PedidoId" value="@Model.Id" />
+                <div class="field">
+                    <label for="Monto">Monto (S/)</label>
+                    <input type="number" id="Monto" name="Monto" step="0.01" min="0.01" max="@Model.Saldo.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" value="@Model.Saldo.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" required />
+                </div>
+                <div class="field" style="margin-top:12px">
+                    <label for="Metodo">Método de pago</label>
+                    <select id="Metodo" name="Metodo">
+                        @foreach (var m in metodos)
+                        {
+                            <option value="@m">@m</option>
+                        }
+                    </select>
+                </div>
+                <div class="field" style="margin-top:12px">
+                    <label for="Observacion">Observación</label>
+                    <input type="text" id="Observacion" name="Observacion" maxlength="200" />
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Registrar pago</button>
+                </div>
+            </form>
+        }
+    </section>
+</div>

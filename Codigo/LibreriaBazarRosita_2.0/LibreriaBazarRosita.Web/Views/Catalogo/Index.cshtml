@@ -1,0 +1,245 @@
+﻿@model IEnumerable<LibreriaBazarRosita.Web.Models.Entities.ItemCatalogo>
+
+@{
+    ViewData["Title"] = "Catálogo de productos y servicios";
+
+    var busqueda = ViewBag.Busqueda as string ?? "";
+    var tipoSeleccionado = ViewBag.Tipo as string ?? "";
+}
+
+<div class="container mt-4">
+
+    <h2>Catálogo de productos y servicios</h2>
+
+    <p class="text-muted">
+        Sistema de Gestión para Librería Bazar Rosita
+    </p>
+
+
+    <div class="mb-3">
+
+        <a asp-controller="Catalogo"
+           asp-action="Crear"
+           class="btn btn-success">
+
+            Registrar producto o servicio
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Exito"]
+        </div>
+    }
+
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info" role="alert">
+            @TempData["Info"]
+        </div>
+    }
+
+
+
+    <!-- Formulario de búsqueda -->
+    <form method="get"
+          asp-controller="Catalogo"
+          asp-action="Index"
+          class="row g-3 mb-4">
+
+        <div class="col-md-5">
+
+            <label for="busqueda"
+                   class="form-label">
+                Buscar por nombre
+            </label>
+
+            <input type="search"
+                   id="busqueda"
+                   name="busqueda"
+                   value="@busqueda"
+                   class="form-control"
+                   placeholder="Ejemplo: Cuaderno" />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <label for="tipo" class="form-label">
+                Tipo de ítem
+            </label>
+
+            <select id="tipo"
+                    name="tipo"
+                    class="form-select">
+
+                <option value="">Todos</option>
+
+                <option value="PRODUCTO"
+                        selected="@(tipoSeleccionado == "PRODUCTO")">
+                    Productos
+                </option>
+
+                <option value="SERVICIO"
+                        selected="@(tipoSeleccionado == "SERVICIO")">
+                    Servicios
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Buscar
+            </button>
+
+            <a asp-controller="Catalogo"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Limpiar
+            </a>
+
+        </div>
+
+    </form>
+
+    <!-- Cantidad de resultados -->
+    <p>
+        <strong>Resultados encontrados:</strong>
+        @Model.Count()
+    </p>
+
+    <!-- Tabla del catálogo -->
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Precio (S/)</th>
+                    <th>Stock actual</th>
+                    <th>Stock mínimo</th>
+                    <th>Estado del stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.IdItem</td>
+                            <td>@item.Nombre</td>
+                            <td>@item.TipoItem</td>
+
+                            <td>
+                                @item.Precio.ToString("0.00")
+                            </td>
+
+                            @if (item.Producto != null)
+                            {
+                                <td>
+                                    @item.Producto.StockActual
+                                </td>
+
+                                <td>
+                                    @item.Producto.StockMinimo
+                                </td>
+
+                                <td>
+                                    @if (item.Producto.StockActual <=
+                                                            item.Producto.StockMinimo)
+                                    {
+                                        <span class="badge bg-danger">
+                                            Stock bajo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">
+                                            Disponible
+                                        </span>
+                                    }
+                                </td>
+                            }
+                            else
+                            {
+                                <td>No aplica</td>
+                                <td>No aplica</td>
+
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        Servicio
+                                    </span>
+                                </td>
+                            }
+
+
+
+                            <td>
+                                <div class="d-flex gap-2">
+
+                                    <!-- Botón para modificar -->
+                                    <a asp-controller="Catalogo"
+                                       asp-action="Editar"
+                                       asp-route-id="@item.IdItem"
+                                       class="btn btn-warning btn-sm">
+
+                                        Modificar
+
+                                    </a>
+
+                                    <!-- Formulario para desactivar -->
+                                    <form asp-controller="Catalogo"
+                                          asp-action="Desactivar"
+                                          asp-route-id="@item.IdItem"
+                                          method="post"
+                                          onsubmit="return confirm('¿Está seguro de desactivar este ítem?');">
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+
+                                            Desactivar
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8"
+                            class="text-center text-muted py-4">
+                            No se encontraron productos
+                            o servicios con esos criterios.
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

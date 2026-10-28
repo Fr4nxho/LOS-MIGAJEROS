@@ -1,0 +1,97 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.IniciarSesionViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Iniciar sesión</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="text-center mb-2">
+                        Librería Bazar Rosita
+                    </h5>
+
+                    <p class="text-muted text-center">
+                        Sistema de Gestión
+                    </p>
+
+                    <form asp-controller="Acceso"
+                          asp-action="IniciarSesion"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="returnUrl"
+                               value="@returnUrl" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="NombreUsuario"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="NombreUsuario"
+                                   class="form-control"
+                                   autocomplete="username" />
+
+                            <span asp-validation-for="NombreUsuario"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Clave"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Clave"
+                                   class="form-control"
+                                   autocomplete="current-password" />
+
+                            <span asp-validation-for="Clave"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            Ingresar
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
