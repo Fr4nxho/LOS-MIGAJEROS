@@ -1,4 +1,6 @@
 ﻿
+using System.Globalization;
+using System.Text;
 using System.Security.Claims;
 using LibreriaBazarRosita.Web.Data;
 using LibreriaBazarRosita.Web.Models.Entities;
@@ -432,5 +434,249 @@ namespace LibreriaBazarRosita.Web.Controllers
 
             return View("Crear", modelo);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "PROPIETARIO,ENCARGADO")]
+        public async Task<IActionResult> Historial(
+            DateTime? desde,
+            DateTime? hasta)
+        {
+            if (desde.HasValue && hasta.HasValue &&
+                desde.Value.Date > hasta.Value.Date)
+            {
+                TempData["Info"] =
+                    "La fecha inicial no puede ser posterior a la fecha final.";
+
+                return RedirectToAction(nameof(Historial));
+            }
+
+            var consulta = _context.Set<Ventum>()
+                .AsNoTracking()
+                .Include(v => v.IdUsuarioNavigation)
+                .Include(v => v.PagoVentum)
+                .AsQueryable();
+
+            if (desde.HasValue)
+            {
+                consulta = consulta.Where(v =>
+                    v.FechaHora >= desde.Value.Date);
+            }
+
+            if (hasta.HasValue)
+            {
+                DateTime fechaLimite = hasta.Value.Date.AddDays(1);
+
+                consulta = consulta.Where(v =>
+                    v.FechaHora < fechaLimite);
+            }
+
+            var ventas = await consulta
+                .OrderByDescending(v => v.FechaHora)
+                .ThenByDescending(v => v.IdVenta)
+                .ToListAsync();
+
+            ViewBag.Desde = desde?.ToString("yyyy-MM-dd");
+            ViewBag.Hasta = hasta?.ToString("yyyy-MM-dd");
+
+            return View(ventas);
+        }
+
+        // ========================================
+        // CONSULTAR RESUMEN DIARIO DE VENTAS
+        // ========================================
+
+        [HttpGet]
+        [Authorize(Roles = "PROPIETARIO,ENCARGADO")]
+        public async Task<IActionResult> ResumenDiario(
+            DateTime? fecha)
+        {
+            DateTime fechaConsulta = (fecha ?? DateTime.Today).Date;
+
+            if (fechaConsulta >= DateTime.MaxValue.Date)
+            {
+                return BadRequest("Fecha no válida.");
+            }
+
+            DateTime fechaSiguiente = fechaConsulta.AddDays(1);
+
+            // Solo se consideran ventas completadas.
+            var ventas = await _context.Set<Ventum>()
+                .AsNoTracking()
+                .Include(v => v.PagoVentum)
+                .Where(v =>
+                    v.Estado == "COMPLETADA" &&
+                    v.FechaHora >= fechaConsulta &&
+                    v.FechaHora < fechaSiguiente)
+                .ToListAsync();
+
+            var modelo = new ResumenDiarioViewModel
+            {
+                Fecha = fechaConsulta,
+
+                CantidadVentas = ventas.Count,
+
+                Subtotal = ventas.Sum(v => v.Subtotal),
+
+                Descuentos = ventas.Sum(v => v.Descuento),
+
+                Ingresos = ventas.Sum(v => v.Total),
+
+                MediosPago = ventas
+                    .GroupBy(v =>
+                        v.PagoVentum?.MedioPago
+                        ?? "SIN REGISTRAR")
+                    .Select(grupo => new ResumenMedioPagoViewModel
+                    {
+                        MedioPago = grupo.Key,
+                        Cantidad = grupo.Count(),
+                        Total = grupo.Sum(v => v.Total)
+                    })
+                    .OrderBy(x => x.MedioPago)
+                    .ToList()
+            };
+
+            return View(modelo);
+        }
+
+        // ========================================
+        // GENERAR REPORTE DE VENTAS
+        // ========================================
+
+        [HttpGet]
+        [Authorize(Roles = "PROPIETARIO,ENCARGADO")]
+        public async Task<IActionResult> Reporte(
+            DateTime? desde,
+            DateTime? hasta)
+        {
+            var d = (desde ?? DateTime.Today.AddDays(-6)).Date;
+            var h = (hasta ?? DateTime.Today).Date;
+
+            if (d > h || h == DateTime.MaxValue.Date)
+            {
+                TempData["Info"] = "Seleccione un rango de fechas válido.";
+                return RedirectToAction(nameof(Historial));
+            }
+
+            var modelo = await ObtenerReporteVentas(d, h);
+
+            return View(modelo);
+        }
+
+        // ========================================
+        // EXPORTAR RESUMEN DE VENTAS
+        // ========================================
+
+        [HttpGet]
+        [Authorize(Roles = "PROPIETARIO,ENCARGADO")]
+        public async Task<IActionResult> ExportarResumen(
+            DateTime? desde,
+            DateTime? hasta)
+        {
+            var d = (desde ?? DateTime.Today.AddDays(-6)).Date;
+            var h = (hasta ?? DateTime.Today).Date;
+
+            if (d > h || h == DateTime.MaxValue.Date)
+            {
+                return BadRequest("Rango de fechas no válido.");
+            }
+
+            var reporte = await ObtenerReporteVentas(d, h);
+
+            if (reporte.CantidadVentas == 0)
+            {
+                TempData["Info"] =
+                    "No hay ventas para exportar en las fechas seleccionadas.";
+
+                return RedirectToAction(
+                    nameof(Reporte),
+                    new
+                    {
+                        desde = d.ToString("yyyy-MM-dd"),
+                        hasta = h.ToString("yyyy-MM-dd")
+                    });
+            }
+
+            var cultura = new CultureInfo("es-PE");
+            var csv = new StringBuilder();
+
+            csv.AppendLine(
+                "Fecha;Ventas;Subtotal;Descuentos;Ingresos");
+
+            foreach (var dia in reporte.PorDia)
+            {
+                csv.AppendLine(
+                    $"{dia.Fecha:dd/MM/yyyy};" +
+                    $"{dia.Cantidad};" +
+                    $"{dia.Subtotal.ToString("0.00", cultura)};" +
+                    $"{dia.Descuentos.ToString("0.00", cultura)};" +
+                    $"{dia.Ingresos.ToString("0.00", cultura)}");
+            }
+
+            csv.AppendLine(
+                $"TOTAL;{reporte.CantidadVentas};" +
+                $"{reporte.Subtotal.ToString("0.00", cultura)};" +
+                $"{reporte.Descuentos.ToString("0.00", cultura)};" +
+                $"{reporte.Ingresos.ToString("0.00", cultura)}");
+
+            // UTF-8 con BOM para compatibilidad con Excel.
+            byte[] contenido = Encoding.UTF8.GetBytes(csv.ToString());
+
+            byte[] archivo = Encoding.UTF8.GetPreamble()
+                .Concat(contenido)
+                .ToArray();
+
+            string nombreArchivo =
+                $"ResumenVentas_{d:yyyyMMdd}_{h:yyyyMMdd}.csv";
+
+            return File(
+                archivo,
+                "text/csv; charset=utf-8",
+                nombreArchivo);
+        }
+
+        // ========================================
+        // OBTENER DATOS DEL REPORTE
+        // ========================================
+
+        private async Task<ReporteVentasViewModel> ObtenerReporteVentas(
+            DateTime desde,
+            DateTime hasta)
+        {
+            DateTime fechaLimite = hasta.AddDays(1);
+
+            var registros = await _context.Set<Ventum>()
+                .AsNoTracking()
+                .Include(v => v.IdUsuarioNavigation)
+                .Include(v => v.PagoVentum)
+                .Where(v =>
+                    v.Estado == "COMPLETADA" &&
+                    v.FechaHora >= desde &&
+                    v.FechaHora < fechaLimite)
+                .OrderByDescending(v => v.FechaHora)
+                .ThenByDescending(v => v.IdVenta)
+                .ToListAsync();
+
+            return new ReporteVentasViewModel
+            {
+                Desde = desde,
+                Hasta = hasta,
+
+                Ventas = registros
+                    .Select(v => new VentaReporteFilaViewModel
+                    {
+                        IdVenta = v.IdVenta,
+                        FechaHora = v.FechaHora,
+                        Usuario = v.IdUsuarioNavigation?.NombreUsuario
+                            ?? "No disponible",
+                        MedioPago = v.PagoVentum?.MedioPago
+                            ?? "No registrado",
+                        Subtotal = v.Subtotal,
+                        Descuento = v.Descuento,
+                        Total = v.Total
+                    })
+                    .ToList()
+            };
+        }
+
     }
 }

@@ -1,0 +1,225 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.CrearPedidoViewModel
+
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Registrar pedido";
+
+    var proveedores = ViewBag.Proveedores as List<SelectListItem>
+        ?? new List<SelectListItem>();
+
+    var productos = ViewBag.Productos as List<SelectListItem>
+        ?? new List<SelectListItem>();
+}
+
+<div class="container mt-4">
+
+    <h2>Registrar pedido a proveedor</h2>
+
+    <form asp-action="Crear" method="post">
+
+        <div asp-validation-summary="All"
+             class="text-danger mb-3"></div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">
+                Proveedor
+            </label>
+
+            <select asp-for="IdProveedor"
+                    asp-items="proveedores"
+                    class="form-select">
+                <option value="">Seleccione un proveedor</option>
+            </select>
+        </div>
+
+        <h5>Detalle del pedido</h5>
+
+        <div id="detallePedido">
+
+            @for (int i = 0; i < Model.Detalles.Count; i++)
+            {
+                var linea = Model.Detalles[i];
+
+                <div class="row g-2 mb-3 align-items-end fila-detalle">
+
+                    <div class="col-md-5">
+                        <label class="form-label">
+                            Producto
+                        </label>
+
+                        <select name="Detalles[@i].IdProducto"
+                                class="form-select">
+
+                            <option value="">
+                                Seleccione un producto
+                            </option>
+
+                            @foreach (var producto in productos)
+                            {
+                                <option value="@producto.Value"
+                                        selected="@(linea.IdProducto?.ToString() == producto.Value)">
+                                    @producto.Text
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">
+                            Cantidad
+                        </label>
+
+                        <input type="number"
+                               name="Detalles[@i].Cantidad"
+                               class="form-control cantidad"
+                               min="1"
+                               max="10000"
+                               step="1"
+                               value="@linea.Cantidad" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Costo unitario (S/)
+                        </label>
+
+                        <input type="number"
+                               name="Detalles[@i].CostoUnitario"
+                               class="form-control costo"
+                               min="0.01"
+                               max="100000"
+                               step="0.01"
+                               value="@(linea.CostoUnitario?.ToString(CultureInfo.InvariantCulture))" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="button"
+                                class="btn btn-outline-danger w-100 quitar-fila">
+                            Quitar
+                        </button>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <button type="button"
+                id="agregarProducto"
+                class="btn btn-outline-primary mb-4">
+            Agregar otro producto
+        </button>
+
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-between">
+                <strong>Total estimado</strong>
+
+                <strong id="totalEstimado">
+                    S/ 0.00
+                </strong>
+            </div>
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Registrar pedido
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const contenedor = document.getElementById("detallePedido");
+        const agregar = document.getElementById("agregarProducto");
+
+        function renumerar() {
+            const filas = contenedor.querySelectorAll(".fila-detalle");
+
+            filas.forEach((fila, indice) => {
+                fila.querySelectorAll("[name]").forEach(campo => {
+                    campo.name = campo.name.replace(
+                        /Detalles\[\d+\]/,
+                        `Detalles[${indice}]`
+                    );
+                });
+            });
+        }
+
+        function calcularTotal() {
+            let total = 0;
+
+            contenedor.querySelectorAll(".fila-detalle").forEach(fila => {
+                const cantidad = Number(
+                    fila.querySelector(".cantidad").value
+                );
+
+                const costo = Number(
+                    fila.querySelector(".costo").value
+                );
+
+                if (Number.isFinite(cantidad) &&
+                    Number.isFinite(costo) &&
+                    cantidad > 0 && costo > 0) {
+                    total += cantidad * costo;
+                }
+            });
+
+            document.getElementById("totalEstimado").textContent =
+                "S/ " + total.toFixed(2);
+        }
+
+        agregar.addEventListener("click", () => {
+            const filas = contenedor.querySelectorAll(".fila-detalle");
+
+            if (filas.length >= 20) {
+                alert("Máximo 20 líneas por pedido.");
+                return;
+            }
+
+            const copia = filas[0].cloneNode(true);
+
+            copia.querySelectorAll("input, select").forEach(campo => {
+                campo.value = "";
+            });
+
+            contenedor.appendChild(copia);
+
+            renumerar();
+            calcularTotal();
+        });
+
+        contenedor.addEventListener("click", evento => {
+            const boton = evento.target.closest(".quitar-fila");
+
+            if (!boton) return;
+
+            const filas = contenedor.querySelectorAll(".fila-detalle");
+            const fila = boton.closest(".fila-detalle");
+
+            if (filas.length === 1) {
+                fila.querySelectorAll("input, select").forEach(campo => {
+                    campo.value = "";
+                });
+            } else {
+                fila.remove();
+            }
+
+            renumerar();
+            calcularTotal();
+        });
+
+        contenedor.addEventListener("input", calcularTotal);
+
+        calcularTotal();
+    </script>
+}

@@ -1,68 +1,148 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    var controladorActual =
+        ViewContext.RouteData.Values["controller"]?.ToString();
+
+    bool autenticado = User.Identity?.IsAuthenticated == true;
+
+    bool tieneAcceso = autenticado &&
+        (User.IsInRole("PROPIETARIO") ||
+         User.IsInRole("ENCARGADO"));
+}
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LibreriaBazarRosita.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LibreriaBazarRosita.Web.styles.css" asp-append-version="true" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Librería Bazar Rosita</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/LibreriaBazarRosita.Web.styles.css"
+          asp-append-version="true" />
 </head>
-<body>
+
+<body class="app-body">
+
+    <!-- ENCABEZADO PRINCIPAL -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibreriaBazarRosita.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white
+                    border-bottom app-navbar">
+
+            <div class="container">
+
+                <!-- NOMBRE DEL NEGOCIO -->
+                <a class="navbar-brand app-brand"
+                   asp-controller="Catalogo"
+                   asp-action="Index">
+
+                    Librería Bazar Rosita
+
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal"
+                        aria-expanded="false"
+                        aria-label="Mostrar menú">
+
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
 
-                        @if (User.Identity?.IsAuthenticated == true &&
-                                                (User.IsInRole("PROPIETARIO") ||
-                                                User.IsInRole("ENCARGADO")))
-                        {
+                <div class="collapse navbar-collapse"
+                     id="menuPrincipal">
+
+                    <!-- NAVEGACIÓN DE MÓDULOS -->
+                    @if (tieneAcceso)
+                    {
+                        <ul class="navbar-nav me-auto app-nav">
+
                             <li class="nav-item">
-
-                                <a class="nav-link text-dark"
+                                <a class="nav-link @(controladorActual == "Catalogo" ? "active" : "")"
                                    asp-controller="Catalogo"
                                    asp-action="Index">
 
                                     Catálogo
 
                                 </a>
-
                             </li>
 
                             <li class="nav-item">
+                                <a class="nav-link @(controladorActual == "Ventas" ? "active" : "")"
+                                   asp-controller="Ventas"
+                                   asp-action="Historial">
+                                    Ventas
+                                </a>
+                            </li>
 
-                                <a class="nav-link text-dark"
+                            <li class="nav-item">
+                                <a class="nav-link @(controladorActual == "Inventario" ? "active" : "")"
                                    asp-controller="Inventario"
                                    asp-action="Index">
 
                                     Inventario
 
                                 </a>
-
                             </li>
-                        }
 
-                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link @(controladorActual == "Proveedores" ? "active" : "")"
+                                   asp-controller="Proveedores"
+                                   asp-action="Index">
 
-                    @if (User.Identity?.IsAuthenticated == true)
+                                    Proveedores
+
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(controladorActual == "Pedidos" ? "active" : "")"
+                                   asp-controller="Pedidos"
+                                   asp-action="Index">
+
+                                    Pedidos
+
+                                </a>
+                            </li>
+
+                            @if (User.IsInRole("PROPIETARIO"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(controladorActual == "Usuarios" ? "active" : "")"
+                                       asp-controller="Usuarios"
+                                       asp-action="Index">
+                                        Usuarios
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+                    }
+                    else
                     {
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="me-auto"></div>
+                    }
 
-                            <span class="text-dark">
-                                Usuario: @User.Identity.Name
+                    <!-- USUARIO Y SESIÓN -->
+                    @if (autenticado)
+                    {
+                        <div class="d-flex align-items-center
+                                        gap-3 app-user-section">
+
+                            <span class="app-username">
+                                @User.Identity?.Name
                             </span>
 
                             <form asp-controller="Acceso"
@@ -72,7 +152,9 @@
 
                                 <button type="submit"
                                         class="btn btn-outline-danger btn-sm">
+
                                     Cerrar sesión
+
                                 </button>
 
                             </form>
@@ -83,7 +165,7 @@
                     {
                         <a asp-controller="Acceso"
                            asp-action="IniciarSesion"
-                           class="btn btn-outline-primary btn-sm">
+                           class="btn btn-primary btn-sm">
 
                             Iniciar sesión
 
@@ -91,23 +173,43 @@
                     }
 
                 </div>
+
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <!-- CONTENIDO DE CADA MÓDULO -->
+    <div class="container app-content">
+
+        <main role="main" class="py-4">
+
             @RenderBody()
+
         </main>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LibreriaBazarRosita.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer app-footer">
+
+        <div class="container text-center">
+
+            <span>
+                &copy; @DateTime.Now.Year Librería Bazar Rosita
+            </span>
+
         </div>
+
     </footer>
+
+    <!-- SCRIPTS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

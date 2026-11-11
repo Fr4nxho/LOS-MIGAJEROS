@@ -1,0 +1,192 @@
+﻿@model LibreriaBazarRosita.Web.Models.Entities.PedidoProveedor
+
+@{
+    ViewData["Title"] = "Detalle del pedido";
+}
+
+<div class="container mt-4">
+
+    <h2>Detalle del pedido N.º @Model.IdPedido</h2>
+
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Info"]
+        </div>
+    }
+
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <strong>Proveedor</strong>
+                    <p class="mb-0">
+                        @Model.IdProveedorNavigation.Nombre
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Fecha</strong>
+                    <p class="mb-0">
+                        @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Estado</strong>
+                    <p class="mb-0">
+
+                        <span class="badge @(Model.Estado == "RECIBIDO"
+                                  ? "bg-success"
+                                  : Model.Estado == "ANULADO"
+                                      ? "bg-danger"
+                                      : "bg-warning text-dark")">
+
+                            @Model.Estado
+
+                        </span>
+
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <h5>Productos solicitados</h5>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Costo unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var detalle in Model.DetallePedidos
+                                .OrderBy(d => d.IdDetallePedido))
+                {
+                    <tr>
+
+                        <td>
+                            @(detalle.IdProductoNavigation.IdProductoNavigation.Nombre)
+                        </td>
+
+
+                        <td>@detalle.Cantidad</td>
+
+                        <td>
+                            S/ @detalle.CostoUnitario.ToString("0.00")
+                        </td>
+
+                        <td>
+                            S/ @detalle.Subtotal.ToString("0.00")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+            <tfoot>
+                <tr class="table-light">
+                    <th colspan="3" class="text-end">
+                        Total del pedido
+                    </th>
+
+                    <th>
+                        S/ @Model.Total.ToString("0.00")
+                    </th>
+                </tr>
+            </tfoot>
+
+        </table>
+    </div>
+
+    <div class="card mt-4 mb-4">
+        <div class="card-body">
+
+            <h5>Pago al proveedor</h5>
+
+
+            @if (Model.PagoProveedor == null)
+            {
+                <p>
+                    <span class="badge bg-secondary">
+                        Pendiente de pago
+                    </span>
+                </p>
+
+                @if (Model.Estado != "ANULADO")
+                {
+                    <a asp-controller="Pedidos"
+                       asp-action="RegistrarPago"
+                       asp-route-id="@Model.IdPedido"
+                       class="btn btn-success btn-sm">
+
+                        Registrar pago
+
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="mb-1">
+                    <strong>Importe:</strong>
+                    S/ @Model.PagoProveedor.Monto.ToString("0.00")
+                </p>
+
+                <p class="mb-1">
+                    <strong>Medio de pago:</strong>
+                    @Model.PagoProveedor.MedioPago
+                </p>
+
+                <p class="mb-0">
+                    <strong>Fecha:</strong>
+                    @Model.PagoProveedor.FechaHora.ToString("dd/MM/yyyy HH:mm")
+                </p>
+            }
+
+        </div>
+    </div>
+
+
+    @if (Model.Estado == "PENDIENTE")
+    {
+        <form asp-controller="Pedidos"
+              asp-action="Recibir"
+              asp-route-id="@Model.IdPedido"
+              method="post"
+              class="mb-3"
+              onsubmit="return confirm('¿Confirma que recibió toda la mercadería de este pedido?');">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Recibir mercadería
+            </button>
+
+        </form>
+    }
+
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a pedidos
+    </a>
+
+</div>

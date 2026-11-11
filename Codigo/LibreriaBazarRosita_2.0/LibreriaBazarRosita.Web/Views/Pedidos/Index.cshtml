@@ -1,0 +1,103 @@
+﻿@model List<LibreriaBazarRosita.Web.Models.Entities.PedidoProveedor>
+
+@{
+    ViewData["Title"] = "Pedidos a proveedores";
+}
+
+<div class="container mt-4">
+
+    <h2>Pedidos a proveedores</h2>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    <a asp-action="Crear"
+       class="btn btn-success mb-4">
+        Registrar pedido
+    </a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>N.º pedido</th>
+                    <th>Proveedor</th>
+                    <th>Fecha</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var pedido in Model)
+                    {
+                        <tr>
+                            <td>@pedido.IdPedido</td>
+
+                            <td>
+                                @pedido.IdProveedorNavigation.Nombre
+                            </td>
+
+                            <td>
+                                @pedido.Fecha.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                @pedido.DetallePedidos.Count
+                            </td>
+
+                            <td>
+                                S/ @pedido.Total.ToString("0.00")
+                            </td>
+
+                            <td>
+
+                                <span class="badge @(pedido.Estado == "RECIBIDO"
+                                          ? "bg-success"
+                                          : pedido.Estado == "ANULADO"
+                                              ? "bg-danger"
+                                              : "bg-warning text-dark")">
+
+                            @pedido.Estado
+
+                                </span>
+
+                            </td>
+
+                            <td>
+                                <a asp-controller="Pedidos"
+                                   asp-action="Detalle"
+                                   asp-route-id="@pedido.IdPedido"
+                                   class="btn btn-outline-primary btn-sm">
+
+                                    Ver detalle
+
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7"
+                            class="text-center text-muted py-4">
+                            Todavía no existen pedidos registrados.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

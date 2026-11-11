@@ -1,0 +1,136 @@
+﻿@model List<LibreriaBazarRosita.Web.Models.Entities.Proveedor>
+
+@{
+    ViewData["Title"] = "Proveedores";
+    var busqueda = ViewBag.Busqueda as string ?? "";
+    bool incluirInactivos = ViewBag.IncluirInactivos == true;
+}
+
+<div class="container mt-4">
+    <h2>Gestión de proveedores</h2>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    <a asp-action="Crear" class="btn btn-success mb-3">
+        Registrar proveedor
+    </a>
+
+    <form asp-action="Index" method="get"
+          class="row g-3 mb-4">
+
+        <div class="col-md-5">
+            <label class="form-label">Buscar proveedor</label>
+            <input type="search" name="busqueda"
+                   value="@busqueda"
+                   class="form-control"
+                   placeholder="Nombre del proveedor" />
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <label>
+                <input type="checkbox"
+                       name="incluirInactivos"
+                       value="true"
+                       checked="@incluirInactivos" />
+                Mostrar inactivos
+            </label>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-primary" type="submit">
+                Buscar
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Limpiar
+            </a>
+        </div>
+    </form>
+
+    <p><strong>Resultados:</strong> @Model.Count</p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Proveedor</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.IdProveedor</td>
+                        <td>@p.Nombre</td>
+                        <td>@(p.Telefono ?? "No registrado")</td>
+                        <td>@(p.Correo ?? "No registrado")</td>
+                        <td>@(p.Direccion ?? "No registrada")</td>
+                        <td>
+                            @if (p.Estado)
+                            {
+                                <span class="badge bg-success">
+                                    Activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    Inactivo
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+
+                                <a asp-action="Editar"
+                                   asp-route-id="@p.IdProveedor"
+                                   class="btn btn-warning btn-sm">
+                                    Modificar
+                                </a>
+
+                                <form asp-action="CambiarEstado"
+                                      asp-route-id="@p.IdProveedor"
+                                      method="post"
+                                      onsubmit="return confirm('¿Confirma cambiar el estado del proveedor?');">
+
+                                    <button type="submit"
+                                            class="btn btn-sm @(p.Estado ? "btn-danger" : "btn-success")">
+
+                                        @(p.Estado ? "Desactivar" : "Reactivar")
+
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7"
+                            class="text-center text-muted">
+                            No se encontraron proveedores.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

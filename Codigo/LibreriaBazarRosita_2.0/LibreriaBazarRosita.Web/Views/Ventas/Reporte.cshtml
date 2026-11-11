@@ -1,0 +1,199 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.ReporteVentasViewModel
+
+@{
+    ViewData["Title"] = "Reporte de ventas";
+}
+
+<div class="container mt-4">
+
+    <h2>Reporte de ventas</h2>
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Info"]
+        </div>
+    }
+
+    <form asp-controller="Ventas"
+          asp-action="Reporte"
+          method="get"
+          class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <label class="form-label">Desde</label>
+            <input type="date"
+                   name="desde"
+                   value="@Model.Desde.ToString("yyyy-MM-dd")"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Hasta</label>
+            <input type="date"
+                   name="hasta"
+                   value="@Model.Hasta.ToString("yyyy-MM-dd")"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="col-md-6 d-flex align-items-end gap-2 flex-wrap">
+            <button type="submit" class="btn btn-primary">
+                Generar reporte
+            </button>
+
+            <a asp-action="ExportarResumen"
+               asp-route-desde="@Model.Desde.ToString("yyyy-MM-dd")"
+               asp-route-hasta="@Model.Hasta.ToString("yyyy-MM-dd")"
+               class="btn btn-success">
+                Exportar CSV
+            </a>
+        </div>
+
+    </form>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6>Ventas completadas</h6>
+                    <h3>@Model.CantidadVentas</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6>Subtotal</h6>
+                    <h3>S/ @Model.Subtotal.ToString("0.00")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6>Descuentos</h6>
+                    <h3>S/ @Model.Descuentos.ToString("0.00")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-success h-100">
+                <div class="card-body">
+                    <h6>Ingresos totales</h6>
+                    <h3 class="text-success">
+                        S/ @Model.Ingresos.ToString("0.00")
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <h5>Resumen por día</h5>
+
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Ventas</th>
+                    <th>Subtotal</th>
+                    <th>Descuentos</th>
+                    <th>Ingresos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var dia in Model.PorDia)
+                {
+                    <tr>
+                        <td>@dia.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@dia.Cantidad</td>
+                        <td>S/ @dia.Subtotal.ToString("0.00")</td>
+                        <td>S/ @dia.Descuentos.ToString("0.00")</td>
+                        <td>S/ @dia.Ingresos.ToString("0.00")</td>
+                    </tr>
+                }
+
+                @if (Model.CantidadVentas == 0)
+                {
+                    <tr>
+                        <td colspan="5"
+                            class="text-center text-muted py-4">
+                            No hay ventas completadas en este período.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="table-light fw-bold">
+                        <td>Total</td>
+                        <td>@Model.CantidadVentas</td>
+                        <td>S/ @Model.Subtotal.ToString("0.00")</td>
+                        <td>S/ @Model.Descuentos.ToString("0.00")</td>
+                        <td>S/ @Model.Ingresos.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <h5>Detalle de ventas</h5>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>N.º venta</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Medio de pago</th>
+                    <th>Subtotal</th>
+                    <th>Descuento</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var venta in Model.Ventas)
+                {
+                    <tr>
+                        <td>@venta.IdVenta</td>
+                        <td>@venta.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@venta.Usuario</td>
+                        <td>@venta.MedioPago</td>
+                        <td>S/ @venta.Subtotal.ToString("0.00")</td>
+                        <td>S/ @venta.Descuento.ToString("0.00")</td>
+                        <td>S/ @venta.Total.ToString("0.00")</td>
+                    </tr>
+                }
+
+                @if (Model.CantidadVentas == 0)
+                {
+                    <tr>
+                        <td colspan="7"
+                            class="text-center text-muted py-4">
+                            No existen ventas para mostrar.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <a asp-action="Historial"
+       class="btn btn-outline-secondary mt-3">
+        Volver al historial
+    </a>
+
+</div>

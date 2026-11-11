@@ -1,4 +1,5 @@
-﻿
+﻿using System.Security.Cryptography;
+using System.Text;
 using System.Security.Claims;
 using LibreriaBazarRosita.Web.Data;
 using LibreriaBazarRosita.Web.Models.Entities;
@@ -99,7 +100,17 @@ namespace LibreriaBazarRosita.Web.Controllers
                 new Claim(
                     ClaimTypes.Role,
                     usuario.Rol
+                ),
+
+                new Claim(
+                    "ClaveVersion",
+                    Convert.ToHexString(
+                        SHA256.HashData(
+                            Encoding.UTF8.GetBytes(usuario.ClaveHash)
+                        )
+                    )
                 )
+
             };
 
             var identidad = new ClaimsIdentity(
@@ -144,6 +155,7 @@ namespace LibreriaBazarRosita.Web.Controllers
 
         // Pantalla para usuarios sin permisos.
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Denegado()
         {
             return View();

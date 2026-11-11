@@ -1,0 +1,188 @@
+﻿@model IEnumerable<LibreriaBazarRosita.Web.Models.Entities.Ventum>
+
+@{
+    ViewData["Title"] = "Historial de ventas";
+
+    var ventas = Model.ToList();
+
+    decimal ingresos = ventas
+        .Where(v => v.Estado == "COMPLETADA")
+        .Sum(v => v.Total);
+}
+
+<div class="container mt-4">
+
+    <h2>Historial de ventas</h2>
+
+
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+
+        <a asp-controller="Ventas"
+           asp-action="Crear"
+           class="btn btn-success">
+            Registrar venta
+        </a>
+
+        <a asp-controller="Ventas"
+           asp-action="ResumenDiario"
+           class="btn btn-outline-primary">
+            Resumen diario
+        </a>
+
+        <a asp-controller="Ventas"
+           asp-action="Reporte"
+           class="btn btn-outline-primary">
+            Reporte de ventas
+        </a>
+
+    </div>
+
+
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Info"]
+        </div>
+    }
+
+    <form asp-controller="Ventas"
+          asp-action="Historial"
+          method="get"
+          class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <label class="form-label">Desde</label>
+            <input type="date"
+                   name="desde"
+                   value="@ViewBag.Desde"
+                   class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Hasta</label>
+            <input type="date"
+                   name="hasta"
+                   value="@ViewBag.Hasta"
+                   class="form-control" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Buscar
+            </button>
+
+            <a asp-action="Historial"
+               class="btn btn-outline-secondary">
+                Limpiar
+            </a>
+
+        </div>
+
+    </form>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Ventas registradas</h6>
+                    <h3>@ventas.Count</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Ingresos por ventas completadas</h6>
+                    <h3>S/ @ingresos.ToString("0.00")</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>N.º venta</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Subtotal</th>
+                    <th>Descuento</th>
+                    <th>Total</th>
+                    <th>Medio de pago</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (ventas.Any())
+                {
+                    @foreach (var venta in ventas)
+                    {
+                        <tr>
+                            <td>@venta.IdVenta</td>
+
+                            <td>
+                                @venta.FechaHora.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                @(venta.IdUsuarioNavigation?.NombreUsuario
+                                                        ?? "No disponible")
+                                                                       </td>
+
+                            <td>
+                                S/ @venta.Subtotal.ToString("0.00")
+                            </td>
+
+                            <td>
+                                S/ @venta.Descuento.ToString("0.00")
+                            </td>
+
+                            <td>
+                                S/ @venta.Total.ToString("0.00")
+                            </td>
+
+                            <td>
+                                @(venta.PagoVentum?.MedioPago
+                                                        ?? "Pendiente")
+                    </td>
+
+                            <td>
+                                <span class="badge @(venta.Estado == "COMPLETADA"
+                                                                          ? "bg-success"
+                                                                          : venta.Estado == "ANULADA"
+                                                                              ? "bg-danger"
+                                                                              : "bg-warning text-dark")">
+                            @venta.Estado
+                        </span>
+                    </td>
+                </tr>
+                                }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8"
+                            class="text-center text-muted py-4">
+                            No existen ventas registradas
+                            para las fechas seleccionadas.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

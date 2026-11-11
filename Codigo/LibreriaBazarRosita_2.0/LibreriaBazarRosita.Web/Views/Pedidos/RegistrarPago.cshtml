@@ -1,0 +1,79 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.RegistrarPagoProveedorViewModel
+
+@{
+    ViewData["Title"] = "Registrar pago";
+}
+
+<div class="container mt-4">
+
+    <h2>Registrar pago al proveedor</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <p>
+                <strong>Pedido:</strong>
+                N.º @Model.IdPedido
+            </p>
+
+            <p>
+                <strong>Proveedor:</strong>
+                @Model.NombreProveedor
+            </p>
+
+            <h5 class="mb-0">
+                Total: S/ @Model.TotalPedido.ToString("0.00")
+            </h5>
+
+        </div>
+    </div>
+
+    <form asp-action="RegistrarPago"
+          asp-route-id="@Model.IdPedido"
+          method="post">
+
+        <input asp-for="IdPedido" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <div class="mb-4">
+            <label asp-for="MedioPago"
+                   class="form-label"></label>
+
+            <select asp-for="MedioPago"
+                    class="form-select">
+                <option value="">Seleccione un medio de pago</option>
+                <option value="EFECTIVO">Efectivo</option>
+                <option value="YAPE">Yape</option>
+                <option value="PLIN">Plin</option>
+                <option value="TRANSFERENCIA">Transferencia</option>
+            </select>
+
+            <span asp-validation-for="MedioPago"
+                  class="text-danger"></span>
+        </div>
+
+        <button type="submit"
+                class="btn btn-success"
+                onclick="return confirm('¿Confirma que el pago fue realizado?');">
+
+            Confirmar pago
+
+        </button>
+
+        <a asp-action="Detalle"
+           asp-route-id="@Model.IdPedido"
+           class="btn btn-outline-secondary">
+
+            Cancelar
+
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

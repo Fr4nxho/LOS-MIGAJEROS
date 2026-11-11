@@ -1,10 +1,13 @@
-
+using System.Security.Cryptography;
+using System.Text;
 using LibreriaBazarRosita.Web.Data;
 using LibreriaBazarRosita.Web.Models.Entities;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,13 +64,75 @@ builder.Services
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
 
         options.SlidingExpiration = true;
+
+        options.Events.OnValidatePrincipal = async context =>
+        {
+            var idTexto = context.Principal?
+                .FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                ?.Value;
+
+            var rolCookie = context.Principal?
+                .FindFirst(System.Security.Claims.ClaimTypes.Role)
+                ?.Value;
+
+            var versionCookie = context.Principal?
+                .FindFirst("ClaveVersion")?.Value;
+
+            var db = context.HttpContext.RequestServices
+                .GetRequiredService<LibreriaBazarRositaContext>();
+
+            Usuario? usuarioActual = null;
+
+            if (int.TryParse(idTexto, out int idUsuario))
+            {
+                usuarioActual = await db.Usuarios
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
+            }
+
+            bool valido = false;
+
+            if (usuarioActual != null &&
+                usuarioActual.Estado &&
+                usuarioActual.Rol == rolCookie &&
+                !string.IsNullOrEmpty(versionCookie))
+            {
+                var versionActual = Convert.ToHexString(
+                    SHA256.HashData(
+                        Encoding.UTF8.GetBytes(usuarioActual.ClaveHash)
+                    )
+                );
+
+                valido = string.Equals(
+                    versionCookie,
+                    versionActual,
+                    StringComparison.Ordinal);
+            }
+
+            if (!valido)
+            {
+                context.RejectPrincipal();
+
+                await context.HttpContext.SignOutAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+            }
+        };
+
+
     });
 
 // ==========================================
 // 5. REGISTRAR AUTORIZACION
 // ==========================================
 
-builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
 
 var app = builder.Build();
 
@@ -97,9 +162,11 @@ app.UseAuthorization();
 // 7. CONFIGURAR RUTAS MVC
 // ==========================================
 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
+    pattern: "{controller=Catalogo}/{action=Index}/{id?}"
 );
+
 
 app.Run();

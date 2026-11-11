@@ -15,7 +15,7 @@ namespace LibreriaBazarRosita.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Catalogo");
         }
 
         public IActionResult Privacy()

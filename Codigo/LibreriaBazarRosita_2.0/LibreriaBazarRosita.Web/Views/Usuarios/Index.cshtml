@@ -1,0 +1,114 @@
+﻿@model IEnumerable<LibreriaBazarRosita.Web.Models.Entities.Usuario>
+
+@{
+    ViewData["Title"] = "Gestión de usuarios";
+}
+
+<div class="container mt-4">
+
+    <h2>Gestión de usuarios</h2>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Info"]
+        </div>
+    }
+
+    <div class="mb-4">
+        <a asp-controller="Usuarios"
+           asp-action="Crear"
+           class="btn btn-success">
+            Registrar usuario
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre completo</th>
+                    <th>Nombre de usuario</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.NombreUsuario</td>
+                        <td>@usuario.Rol</td>
+
+                        <td>
+                            @if (usuario.Estado)
+                            {
+                                <span class="badge bg-success">
+                                    Activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    Inactivo
+                                </span>
+                            }
+                        </td>
+
+                        <td>
+                            @if (usuario.Rol == "ENCARGADO")
+                            {
+                                <form asp-controller="Usuarios"
+                                      asp-action="CambiarEstado"
+                                      asp-route-id="@usuario.IdUsuario"
+                                      method="post"
+                                      class="d-inline"
+                                      onsubmit="return confirm('¿Confirma el cambio de estado de este usuario?');">
+
+                                    <button type="submit"
+                                            class="btn btn-sm @(usuario.Estado ? "btn-danger" : "btn-success")">
+
+                                        @(usuario.Estado
+                                                                        ? "Desactivar"
+                                                                        : "Reactivar")
+
+                                    </button>
+
+                                </form>
+
+                                <a asp-controller="Usuarios"
+                                   asp-action="RestablecerClave"
+                                   asp-route-id="@usuario.IdUsuario"
+                                   class="btn btn-sm btn-outline-primary ms-2">
+                                    Restablecer contraseña
+                                </a>
+
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    No disponible
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>

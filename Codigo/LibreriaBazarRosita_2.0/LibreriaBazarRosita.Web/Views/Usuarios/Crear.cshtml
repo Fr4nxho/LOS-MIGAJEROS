@@ -1,0 +1,98 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.RegistrarUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Registrar usuario";
+}
+
+<div class="container mt-4">
+
+    <h2>Registrar usuario</h2>
+
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <form asp-controller="Usuarios"
+                  asp-action="Crear"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Nombre"
+                           class="form-label"></label>
+
+                    <input asp-for="Nombre"
+                           class="form-control"
+                           autocomplete="name" />
+
+                    <span asp-validation-for="Nombre"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NombreUsuario"
+                           class="form-label"></label>
+
+                    <input asp-for="NombreUsuario"
+                           class="form-control"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="NombreUsuario"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Rol</label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="Encargado"
+                           disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Clave"
+                           class="form-label"></label>
+
+                    <input asp-for="Clave"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="Clave"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ConfirmarClave"
+                           class="form-label"></label>
+
+                    <input asp-for="ConfirmarClave"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="ConfirmarClave"
+                          class="text-danger"></span>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Guardar usuario
+                </button>
+
+                <a asp-controller="Usuarios"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

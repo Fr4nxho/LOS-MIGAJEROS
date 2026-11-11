@@ -1,0 +1,74 @@
+﻿@model LibreriaBazarRosita.Web.Models.ViewModels.RestablecerClaveViewModel
+
+@{
+    ViewData["Title"] = "Restablecer contraseña";
+}
+
+<div class="container mt-4">
+
+    <h2>Restablecer contraseña</h2>
+
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <form asp-controller="Usuarios"
+                  asp-action="RestablecerClave"
+                  method="post">
+
+                <input asp-for="IdUsuario" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Nombre de usuario
+                    </label>
+
+                    <input value="@Model.NombreUsuario"
+                           class="form-control"
+                           disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NuevaClave"
+                           class="form-label"></label>
+
+                    <input asp-for="NuevaClave"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="NuevaClave"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ConfirmarClave"
+                           class="form-label"></label>
+
+                    <input asp-for="ConfirmarClave"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="ConfirmarClave"
+                          class="text-danger"></span>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Guardar contraseña
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

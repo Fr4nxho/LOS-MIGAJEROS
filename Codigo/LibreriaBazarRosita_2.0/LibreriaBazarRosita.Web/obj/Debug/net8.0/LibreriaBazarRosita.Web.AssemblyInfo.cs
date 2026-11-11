@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("ff50a0b6-1a86-4f3d-8ebd-3221c16bd897")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("LibreriaBazarRosita.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37442bddb0bf585f38cbf6b891def8fed94f71ca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e296ed3c7f5e4bb3caa3ea468a6e1ccbddaab3f1")]
 [assembly: System.Reflection.AssemblyProductAttribute("LibreriaBazarRosita.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LibreriaBazarRosita.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

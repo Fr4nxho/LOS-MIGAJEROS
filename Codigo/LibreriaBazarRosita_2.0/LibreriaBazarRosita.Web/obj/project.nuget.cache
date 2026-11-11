@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SLgzf2LLur0=",
+  "dgSpecHash": "fso7DvpYDcE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\git hub diseño de software\\LOS-MIGAJEROS\\Backend\\LibreriaBazarRosita\\LibreriaBazarRosita.Web\\LibreriaBazarRosita.Web.csproj",
+  "projectFilePath": "C:\\Users\\HP\\Desktop\\git hub diseño de software\\LOS-MIGAJEROS\\Codigo\\LibreriaBazarRosita_2.0\\LibreriaBazarRosita.Web\\LibreriaBazarRosita.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.41.0\\azure.core.1.41.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.12.1\\azure.identity.1.12.1.nupkg.sha512",
