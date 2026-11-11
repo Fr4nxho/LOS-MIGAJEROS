@@ -1,0 +1,13 @@
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Compilaciones de .NET
+bin/
+obj/
+
+# Archivos locales
+*.log
+*.tmp
